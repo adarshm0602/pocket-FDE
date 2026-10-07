@@ -1,0 +1,17 @@
+{
+  "id": "CASE-009",
+  "title": "Answer tone changes mid-conversation",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-wayne",
+  "customer": "Wayne Foods",
+  "version": "v3",
+  "description": "Wayne Foods: in one conversation the assistant switched to short, terse answers halfway through.",
+  "teams_touched": [
+    "E",
+    "Q"
+  ],
+  "bounces": 1,
+  "resolution_notes": "q.failover lines show provider-a -> provider-b due to rate limiting; provider-b has a more concise style. Works as designed on v3 (llm.failover.enabled=true). Customer decision needed: accept, or pin the provider.",
+  "quality": "adequate"
+}

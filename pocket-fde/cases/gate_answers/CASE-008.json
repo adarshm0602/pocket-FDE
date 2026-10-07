@@ -1,0 +1,21 @@
+{
+  "symptom": "Generic error on every question after reindex",
+  "owning_team": "G",
+  "affected_versions": [
+    "v3"
+  ],
+  "root_cause": "validation.citations.required=true on v3 rejects responses with no source ids; the reindexed corpus has no source metadata.",
+  "config_involved": [
+    "validation.citations.required"
+  ],
+  "evidence_checked": [
+    "v.verdict FAIL VAL_REJECT_042",
+    "g.chunk_ids (masked, enabled temporarily)"
+  ],
+  "ruled_out": [
+    "validation bug",
+    "LLM gateway"
+  ],
+  "fix": "Re-index with source metadata. Do not disable citations as a first move.",
+  "detection_tip": "VAL_REJECT_042 means no citations; enable obs.rag_g.masked_chunk_id_log to see empty chunk/source ids."
+}

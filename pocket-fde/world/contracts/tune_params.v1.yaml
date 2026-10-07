@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: tune_params.v1
+  version: v1
+  description: hop B -> G
+paths:
+  /tune/{tenant_id}:
+    get:
+      summary: GET /tune/{tenant_id}
+      requestBody:
+        $ref: '#/components/schemas/Body'
+components:
+  schemas:
+    Body:
+      type: object
+      required:
+      - top_k
+      - chunk_size
+      - rerank_weight
+      - overrides
+      properties:
+        top_k:
+          description: int
+        chunk_size:
+          description: int
+        rerank_weight:
+          description: float
+        rewrite_mode:
+          description: history_aware|single_shot (v2+)
+        overrides:
+          description: array

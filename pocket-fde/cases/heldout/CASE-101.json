@@ -1,0 +1,73 @@
+{
+  "id": "CASE-101",
+  "title": "Widget gives odd answers, chat is fine",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-acme",
+  "customer": "Acme Logistics",
+  "version": "v2",
+  "description": "Acme Logistics reports that their embedded assistant widget returns strange 'not enough information' answers for simple questions. Their users in the main chat app get good answers for the same questions. Raised by a support engineer, contact priya.n@acmelogistics.example.",
+  "provided_evidence": [
+    "u.request id=u-3a91 status=ok"
+  ],
+  "ground_truth": {
+    "owning_team": "B",
+    "root_cause": "v2 default tune.rewrite.mode=history_aware with One-Way UI (no session) yields an empty rewritten query and 0 retrieved chunks.",
+    "false_lead": "U",
+    "first_guess_wrong_team": "U",
+    "expected_redirect": [
+      "U",
+      "B"
+    ],
+    "expected_escalate": false,
+    "key_questions_needed": [
+      {
+        "topic": "interactive vs one-way comparison",
+        "any_of": [
+          "interactive",
+          "chat ui"
+        ]
+      },
+      {
+        "topic": "session context",
+        "any_of": [
+          "session"
+        ]
+      },
+      {
+        "topic": "rewrite mode / overrides",
+        "any_of": [
+          "rewrite",
+          "tune.rewrite.mode"
+        ]
+      }
+    ],
+    "needed_evidence": [
+      "g.rewrite",
+      "g.retrieval",
+      "tune.rewrite.mode"
+    ],
+    "version_caveat": "On v3 the default is fixed (single_shot for One-Way); the fix is a v2 tenant override.",
+    "invalid_fix_flags": [],
+    "scenario": {
+      "version": "v2",
+      "tenant_id": "t-acme",
+      "ui_mode": "oneway",
+      "has_session": false,
+      "query": "How do I reset the device?",
+      "provider_latency_ms": 800,
+      "secondary_latency_ms": 800,
+      "tenant_rpm_load": 10,
+      "overrides": {},
+      "config_changes": [],
+      "relevant_doc_rank": 3,
+      "adapter_present": null,
+      "source_metadata": null,
+      "cache_stale": false,
+      "obs_enabled": [],
+      "trace_id": "tr-7f3a91"
+    },
+    "observed_symptom": "empty or odd answer",
+    "observed_error_code": null
+  }
+}

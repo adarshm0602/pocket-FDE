@@ -1,0 +1,24 @@
+{
+  "symptom": "Answers ignore tenant documents",
+  "owning_team": "B",
+  "affected_versions": [
+    "v1",
+    "v2",
+    "v3"
+  ],
+  "root_cause": "Tenant-level override tune.top_k=2 means the relevant chunk (rank 5) is never retrieved.",
+  "config_involved": [
+    "tune.top_k",
+    "tune.tenant_override.enabled"
+  ],
+  "evidence_checked": [
+    "g.retrieval n_chunks=2 top_k_effective=2",
+    "b.config_change audit for tenant"
+  ],
+  "ruled_out": [
+    "model quality (LLM gateway)",
+    "RAG rewrite"
+  ],
+  "fix": "Remove the tenant override so default top_k applies (8 on v3, 5 on v1/v2).",
+  "detection_tip": "Check g.retrieval top_k_effective against the default and look in b.config_change for tenant overrides."
+}

@@ -1,0 +1,18 @@
+{
+  "id": "CASE-002",
+  "title": "One-Way requests fail with generic error under load",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-wonka",
+  "customer": "Wonka Labs",
+  "version": "v2",
+  "description": "Wonka Labs: One-Way UI shows ERR_UPSTREAM on questions that take a long time. Chat UI users report 'timed out'. Started this week, customer IP range 203.0.113.0/24.",
+  "teams_touched": [
+    "U",
+    "Q",
+    "PLATFORM"
+  ],
+  "bounces": 2,
+  "resolution_notes": "Gateway logs showed provider latency around 9.5s and success, but the UI hop gives up at 8s (platform.http.timeout_ms). Raised platform timeout for the tenant with platform on-call. LLM gateway was healthy.",
+  "quality": "adequate"
+}

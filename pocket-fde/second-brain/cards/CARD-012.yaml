@@ -1,0 +1,26 @@
+id: CARD-012
+source_case: CASE-012
+symptom: Chat UI times out on slow answers for the Acme Logistics tenant (v2).
+affected_versions:
+- v1
+- v2
+owning_team: PLATFORM
+root_cause: Provider response latency (~11 s) exceeded platform.http.timeout_ms (configured
+  at 8000 ms) for the tenant. llm.failover.enabled is a v3-only flag not recognised
+  in v2, so setting it to true was silently ignored and produced no change in behaviour.
+config_involved:
+- llm.failover.enabled
+- platform.http.timeout_ms
+evidence_checked:
+- q.invocation latency_ms=11000 finish_reason=stop
+ruled_out:
+- llm.failover.enabled=true as a mitigation — flag was introduced in v3 and does not
+  exist in v2; the tenant-level override was silently ignored.
+fix: 'Raised platform.http.timeout_ms from 8000 to 15000 for the Acme Logistics tenant.
+  Long-term recommendation: upgrade tenant to v3 to gain functional failover via llm.failover.enabled.'
+detection_tip: Check the flag exists for the customer's version in config_flags before
+  recommending it.
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

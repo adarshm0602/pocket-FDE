@@ -1,0 +1,21 @@
+{
+  "symptom": "Answers generic, tenant tuning lost",
+  "owning_team": "E",
+  "affected_versions": [
+    "v1",
+    "v2"
+  ],
+  "root_cause": "Adapter lookup by tenant_id found nothing after a tenant id change, so the adapter layer silently fell back to the base model (silent in v1/v2).",
+  "config_involved": [
+    "ft.adapter.fallback_to_base"
+  ],
+  "evidence_checked": [
+    "e.adapter adapter_selected=base"
+  ],
+  "ruled_out": [
+    "model quality",
+    "retrieval"
+  ],
+  "fix": "Re-register the adapter under the current tenant_id.",
+  "detection_tip": "v1/v2: e.adapter shows adapter_selected=base with no warning. v3 logs a fallback WARN."
+}

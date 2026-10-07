@@ -1,0 +1,4 @@
+pyyaml==6.0.2
+pytest==8.3.4
+# optional (semantic arm of hybrid retrieval; falls back to TF-IDF if absent):
+# sentence-transformers==3.3.1

@@ -1,0 +1,3 @@
+- [CASE-S45G7 diagnostics](second-brain/cards/case_s45g7_diagnostics.md) — root cause: prepare() method override, reverted to OOB
+- [CASE-573544](cases/CASE-573544.json) — file skipped during upgrade caused code divergence across instances
+- [Identical config, divergent code](second-brain/cards/feedback_identical_config_divergent_code.md) — check deployed code when instances differ despite same config

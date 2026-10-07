@@ -1,0 +1,19 @@
+{
+  "case_number": "CASE-002",
+  "title": "Cache service returning stale data across all customers",
+  "description": "Multiple customers report that search results are outdated. Data updated 1 hour ago not showing in results. Cache TTL appears stuck.",
+  "version": "v3",
+  "customer": "Multiple (SaaS platform)",
+  "severity": "critical",
+  "opened_at": "2026-10-06T08:15:00Z",
+  "evidence": {
+    "logs": [
+      "Cache hit rate 99.8% (normally 45%)",
+      "Invalidation queue growing: 2.3M pending items",
+      "redis-cache cluster memory at 94%"
+    ],
+    "affected_users": 12500,
+    "data_freshness_lag": "58 minutes"
+  },
+  "team_suspicion": "Cache invalidation pipeline or memory pressure"
+}

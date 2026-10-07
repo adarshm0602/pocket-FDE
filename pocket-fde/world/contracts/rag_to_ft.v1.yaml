@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: rag_to_ft.v1
+  version: v1
+  description: hop G -> E
+paths:
+  /ft/prepare:
+    post:
+      summary: POST /ft/prepare
+      requestBody:
+        $ref: '#/components/schemas/Body'
+components:
+  schemas:
+    Body:
+      type: object
+      required:
+      - prompt
+      - context_chunks
+      - source_ids
+      - tenant_id
+      - trace_id
+      properties:
+        prompt:
+          description: string
+        context_chunks:
+          description: array
+        source_ids:
+          description: array
+        tenant_id:
+          description: string
+        trace_id:
+          description: string

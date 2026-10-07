@@ -1,0 +1,16 @@
+.git
+.venv
+.pytest_cache
+node_modules
+.env*
+**/.env*
+personal-notes
+vendor
+dataset
+pipeline
+sources
+**/__pycache__
+**/.pytest_cache
+**/web/evaluation
+**/second-brain/pending
+**/*.access.txt

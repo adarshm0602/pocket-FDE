@@ -1,0 +1,18 @@
+{
+  "id": "CASE-008",
+  "title": "Users get a generic error after reindex",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-globex",
+  "customer": "Globex Bank",
+  "version": "v3",
+  "description": "Globex Bank: every question now returns 'something went wrong' since their documents were re-indexed over the weekend.",
+  "teams_touched": [
+    "R",
+    "V",
+    "G"
+  ],
+  "bounces": 2,
+  "resolution_notes": "v.verdict shows FAIL code=VAL_REJECT_042. Citations are required on v3 and the reindexed corpus lost source metadata so source_ids is empty. Re-indexed with metadata; validation was behaving correctly.",
+  "quality": "adequate"
+}

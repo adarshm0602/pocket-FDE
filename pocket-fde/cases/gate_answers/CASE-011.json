@@ -1,0 +1,21 @@
+{
+  "symptom": "One-Way failures cannot be correlated to backend logs",
+  "owning_team": "U",
+  "affected_versions": [
+    "v2",
+    "v3"
+  ],
+  "root_cause": "One-Way UI drops trace_id in prod and logs only request id and status; evidence gap, not a defect.",
+  "config_involved": [
+    "obs.oneway_u.verbose_log"
+  ],
+  "evidence_checked": [
+    "u.verbose (after enabling)",
+    "q.ratelimit by timestamp"
+  ],
+  "ruled_out": [
+    "bug in gateway logging"
+  ],
+  "fix": "Temporarily enable obs.oneway_u.verbose_log (global, log volume risk) and correlate by timestamp.",
+  "detection_tip": "Enable obs.oneway_u.verbose_log for a short window; correlate to q.* by timestamp."
+}

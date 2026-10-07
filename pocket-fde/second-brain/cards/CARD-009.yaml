@@ -1,0 +1,24 @@
+id: CARD-009
+source_case: CASE-009
+symptom: Assistant switched from normal to short, terse answers mid-conversation within
+  a single session (reported by Wayne Foods).
+affected_versions:
+- v3
+owning_team: Q
+root_cause: Rate limiting on provider-a triggered an LLM failover to provider-b (llm.failover.enabled=true
+  on v3); provider-b produces a more concise response style, causing the observable
+  tone shift mid-conversation.
+config_involved:
+- llm.failover.enabled=true
+evidence_checked:
+- q.failover (confirmed provider-a → provider-b transition attributable to rate limiting)
+ruled_out:
+- adapter change
+- validation
+fix: Works as designed; customer decides whether to disable failover or raise the
+  rate limit.
+detection_tip: Look for q.failover lines (v3 only).
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

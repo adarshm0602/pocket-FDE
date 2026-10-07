@@ -1,0 +1,20 @@
+{
+  "case_number": "CASE-003",
+  "title": "Timeout errors on v1 API endpoint",
+  "description": "Legacy v1 endpoint timing out for 15% of requests. v2 endpoint works fine. Started after infrastructure scaling change.",
+  "version": "v1",
+  "customer": "Acme Corp (legacy integration)",
+  "severity": "medium",
+  "opened_at": "2026-10-05T22:45:00Z",
+  "evidence": {
+    "logs": [
+      "p99 latency for v1: 42s",
+      "p99 latency for v2: 280ms",
+      "Error: gateway timeout (504) after 30s",
+      "Spike in database connection pool exhaustion logs"
+    ],
+    "request_volume": "8,500 req/min",
+    "error_rate": "15.3%"
+  },
+  "team_suspicion": "Database or platform gateway bottleneck on v1 code path"
+}

@@ -1,0 +1,90 @@
+# Neighboring services that coexist with Pocket FDE incident triage
+# These represent other features in the platform that run alongside
+
+services:
+
+  team_q_batch:
+    name: "Request Batching (Team Q)"
+    language: "Python"
+    description: "Collects individual requests, batches them for LLM efficiency. Separate from single-request path."
+    config_flags:
+      batch.size: 50
+      batch.timeout_ms: 5000
+      batch.max_parallel: 10
+      batch.retry.enabled: true
+    log_stream: "q.batch"
+    typical_issues:
+      - Queue backlog if batch.size too high
+      - Timeout if batch.timeout_ms too low for network
+      - Memory issues if max_parallel too high
+
+  team_g_cache:
+    name: "Response Cache (Team G)"
+    language: "Python"
+    description: "Caches RAG responses by query + tenant + tune-config hash. Cache invalidation on tune changes (v3)."
+    config_flags:
+      cache.enabled: false  # v1/v2 default; true in v3
+      cache.ttl_seconds: 3600
+      cache.max_entries: 10000
+      cache.invalidate_on_tune_change: true
+    log_stream: "g.cache"
+    typical_issues:
+      - Stale answers if cache invalidation not wired (v3)
+      - Cache thrashing if TTL too low
+      - Memory bloat if max_entries too high
+
+  team_v_guardrails:
+    name: "Query Guardrails (Team V)"
+    language: "Python"
+    description: "Filters queries for safety/abuse/policy before sending to model. Separate from response validation."
+    config_flags:
+      guardrails.enabled: true
+      guardrails.block_pii: false  # Off in prod (would reject queries with sensitive data)
+      guardrails.block_abuse: true
+      guardrails.block_policy_violation: true
+      guardrails.log_blocked: false  # Off in prod (PII risk)
+    log_stream: "v.guardrails"
+    typical_issues:
+      - False positives if PII detection too strict
+      - Blocks legitimate queries if policy_violation rules too broad
+
+  platform_monitoring:
+    name: "Platform Observability (PLATFORM)"
+    language: "Python"
+    description: "Central monitoring service. All teams log metrics here. Detects cascading failures."
+    config_flags:
+      monitoring.enabled: true
+      monitoring.alert_p99_ms: 5000
+      monitoring.alert_error_rate: 0.05
+      monitoring.cascade_detection: true
+    log_stream: "platform.monitoring"
+    typical_issues:
+      - High memory if too many events retained in memory
+      - Cascade detection false positives if threshold too sensitive
+
+  platform_healthcheck:
+    name: "Health Check (PLATFORM)"
+    language: "Python"
+    description: "Periodic (every 30s) pings all services. Detects degradation. Reports to monitoring."
+    config_flags:
+      healthcheck.enabled: true
+      healthcheck.interval_seconds: 30
+      healthcheck.timeout_ms: 2000
+    log_stream: "platform.healthcheck"
+    typical_issues:
+      - False cascades if healthcheck timeout too low
+      - Missed failures if interval too long
+
+ownership:
+  team_q_batch: "Team Q (LLM Gateway)"
+  team_g_cache: "Team G (RAG Flow)"
+  team_v_guardrails: "Team V (Validation)"
+  platform_monitoring: "PLATFORM (Platform Reliability)"
+  platform_healthcheck: "PLATFORM (Platform Reliability)"
+
+dependencies:
+  platform_monitoring: ["all teams log to this"]
+  platform_healthcheck: ["depends on all services having health endpoints"]
+  team_g_cache: ["feeds into retrieval, affects RAG quality"]
+  team_q_batch: ["parallel to single-request path"]
+  team_v_guardrails: ["runs before retrieval"]

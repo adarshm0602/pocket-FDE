@@ -1,0 +1,74 @@
+{
+  "id": "CASE-106",
+  "title": "Assistant lost our brand voice after upgrade",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-initech",
+  "customer": "Initech Health",
+  "version": "v3",
+  "description": "Initech Health (v3): answers sound generic since the platform upgrade. Support thinks the new model is simply worse and asks the LLM gateway team to roll back the model.",
+  "provided_evidence": [
+    "2025-03-12T10:00:00.970Z INFO ui-r req=req-3a91 tenant=t-initech latency_ms=970 status=ok"
+  ],
+  "ground_truth": {
+    "owning_team": "E",
+    "root_cause": "No adapter registered for the tenant after upgrade; adapter layer falls back to base model (WARN in v3 logs).",
+    "false_lead": "Q",
+    "first_guess_wrong_team": "Q",
+    "expected_redirect": [
+      "Q",
+      "E"
+    ],
+    "expected_escalate": false,
+    "key_questions_needed": [
+      {
+        "topic": "adapter selected for tenant",
+        "any_of": [
+          "adapter",
+          "e.adapter"
+        ]
+      },
+      {
+        "topic": "fallback warning",
+        "any_of": [
+          "fallback",
+          "warn"
+        ]
+      },
+      {
+        "topic": "when did tone change / upgrade",
+        "any_of": [
+          "upgrade",
+          "migration",
+          "when"
+        ]
+      }
+    ],
+    "needed_evidence": [
+      "e.adapter",
+      "ft.adapter.fallback_to_base"
+    ],
+    "version_caveat": "On v3 a WARN fallback_to_base line exists; on v1/v2 the fallback is silent and only adapter_selected=base is visible.",
+    "invalid_fix_flags": [],
+    "scenario": {
+      "version": "v3",
+      "tenant_id": "t-initech",
+      "ui_mode": "interactive",
+      "has_session": true,
+      "query": "How do I reset the device?",
+      "provider_latency_ms": 800,
+      "secondary_latency_ms": 800,
+      "tenant_rpm_load": 10,
+      "overrides": {},
+      "config_changes": [],
+      "relevant_doc_rank": 3,
+      "adapter_present": null,
+      "source_metadata": null,
+      "cache_stale": false,
+      "obs_enabled": [],
+      "trace_id": "tr-7f3a91"
+    },
+    "observed_symptom": "answer is generic, not tenant-tuned",
+    "observed_error_code": null
+  }
+}

@@ -1,0 +1,188 @@
+[
+  {
+    "id": "VAR-UPGRADE-A",
+    "title": "Embedded support answers fail after a platform upgrade",
+    "version": "v3",
+    "description": "After moving from v2 to v3 on Monday, the embedded One-Way support panel cannot answer the device pairing question. Interactive chat still answers that same question for the same tenant. The validation team sees responses with no source citations. No effective tenant configuration has been checked yet.",
+    "provided_evidence": [
+      "u.request request_id=u-810 status=error"
+    ],
+    "ground_truth": {
+      "owning_team": "B",
+      "root_cause": "A tenant-level override tune.rewrite.mode=history_aware (pinned during upgrade migration) overrides the fixed v3 default; with no session the rewrite is empty, no source ids are returned, and v3 citation validation rejects every response (VAL_REJECT_042).",
+      "expected_escalate": false,
+      "key_questions_needed": [
+        {
+          "topic": "tenant overrides / config change history",
+          "any_of": [
+            "override",
+            "b.config_change",
+            "config change"
+          ]
+        },
+        {
+          "topic": "rewrite mode effective value",
+          "any_of": [
+            "rewrite",
+            "tune.rewrite.mode"
+          ]
+        },
+        {
+          "topic": "interactive vs one-way",
+          "any_of": [
+            "interactive"
+          ]
+        }
+      ],
+      "needed_evidence": [
+        "b.config_change",
+        "g.rewrite",
+        "v.verdict",
+        "tune.rewrite.mode"
+      ],
+      "invalid_fix_flags": []
+    },
+    "customer_tier": "standard"
+  },
+  {
+    "id": "VAR-UPGRADE-B",
+    "title": "Widget reports citation rejection after migration",
+    "version": "v3",
+    "description": "We migrated from v2 yesterday. The One-Way widget reports ERR_UPSTREAM for the password reset guide; chat works for the same tenant and query. Validation sees citation rejections. We have the effective configuration and query rewrite below.",
+    "provided_evidence": [
+      "b.config_change flag=tune.rewrite.mode old=single_shot new=history_aware by=migration-script",
+      "g.rewrite had_session=false rewrite_mode=history_aware rewritten_query=\"\"",
+      "v.verdict code=VAL_REJECT_042 sources=0"
+    ],
+    "ground_truth": {
+      "owning_team": "B",
+      "root_cause": "A tenant-level override tune.rewrite.mode=history_aware (pinned during upgrade migration) overrides the fixed v3 default; with no session the rewrite is empty, no source ids are returned, and v3 citation validation rejects every response (VAL_REJECT_042).",
+      "expected_escalate": false,
+      "key_questions_needed": [
+        {
+          "topic": "tenant overrides / config change history",
+          "any_of": [
+            "override",
+            "b.config_change",
+            "config change"
+          ]
+        },
+        {
+          "topic": "rewrite mode effective value",
+          "any_of": [
+            "rewrite",
+            "tune.rewrite.mode"
+          ]
+        },
+        {
+          "topic": "interactive vs one-way",
+          "any_of": [
+            "interactive"
+          ]
+        }
+      ],
+      "needed_evidence": [
+        "b.config_change",
+        "g.rewrite",
+        "v.verdict",
+        "tune.rewrite.mode"
+      ],
+      "invalid_fix_flags": []
+    },
+    "customer_tier": "standard"
+  },
+  {
+    "id": "VAR-BURST",
+    "title": "Document batch jobs cause intermittent embedded failures",
+    "version": "v2",
+    "description": "The embedded One-Way widget succeeds on individual document summaries but returns ERR_UPSTREAM during bursts of concurrent document jobs. Chat tested outside the batch window is fine. We have not measured requests per minute or obtained gateway logs. The pattern follows the busiest processing periods.",
+    "provided_evidence": [
+      "u.request request_id=u-812 status=error"
+    ],
+    "ground_truth": {
+      "owning_team": "Q",
+      "root_cause": "Per-tenant rate limit (60 rpm, v2+) exceeded by bulk runs; One-Way UI has no retry so the 429 surfaces as ERR_UPSTREAM.",
+      "expected_escalate": false,
+      "key_questions_needed": [
+        {
+          "topic": "request volume / rate during runs",
+          "any_of": [
+            "rate",
+            "rpm",
+            "volume",
+            "bulk"
+          ]
+        },
+        {
+          "topic": "gateway rate limit events",
+          "any_of": [
+            "q.ratelimit",
+            "rate limit",
+            "429"
+          ]
+        },
+        {
+          "topic": "trace id / timestamps",
+          "any_of": [
+            "timestamp",
+            "trace",
+            "time"
+          ]
+        }
+      ],
+      "needed_evidence": [
+        "q.ratelimit",
+        "u.request",
+        "llm.ratelimit.per_tenant_rpm"
+      ],
+      "invalid_fix_flags": [
+        "llm.failover.enabled"
+      ]
+    },
+    "customer_tier": "standard"
+  },
+  {
+    "id": "VAR-STEADY",
+    "title": "Every widget query fails even with one request per minute",
+    "version": "v2",
+    "description": "The One-Way widget consistently returns an empty answer for the onboarding guide. Chat answers the same guide for the same tenant. The problem also happens with only one request per minute and no batch work. No upgrade was performed.",
+    "provided_evidence": [
+      "g.rewrite had_session=false rewrite_mode=history_aware rewritten_query=\"\"",
+      "g.retrieval n_chunks=0"
+    ],
+    "ground_truth": {
+      "owning_team": "B",
+      "root_cause": "v2 default tune.rewrite.mode=history_aware with One-Way UI (no session) yields an empty rewritten query and 0 retrieved chunks.",
+      "expected_escalate": false,
+      "key_questions_needed": [
+        {
+          "topic": "interactive vs one-way comparison",
+          "any_of": [
+            "interactive",
+            "chat ui"
+          ]
+        },
+        {
+          "topic": "session context",
+          "any_of": [
+            "session"
+          ]
+        },
+        {
+          "topic": "rewrite mode / overrides",
+          "any_of": [
+            "rewrite",
+            "tune.rewrite.mode"
+          ]
+        }
+      ],
+      "needed_evidence": [
+        "g.rewrite",
+        "g.retrieval",
+        "tune.rewrite.mode"
+      ],
+      "invalid_fix_flags": []
+    },
+    "customer_tier": "standard"
+  }
+]

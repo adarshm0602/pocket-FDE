@@ -1,0 +1,18 @@
+{
+  "id": "CASE-010",
+  "title": "Tuned behaviour gone for one tenant",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-northwind",
+  "customer": "Northwind Retail",
+  "version": "v1",
+  "description": "Northwind Retail: the assistant used to answer in their house style; now it sounds generic. Nothing was changed on their side.",
+  "teams_touched": [
+    "Q",
+    "G",
+    "E"
+  ],
+  "bounces": 2,
+  "resolution_notes": "adapter thing fixed",
+  "quality": "vague"
+}

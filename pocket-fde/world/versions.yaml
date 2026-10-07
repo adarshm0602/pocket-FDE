@@ -1,0 +1,6 @@
+# Supported versions: v3 = latest (n), v2 = n-1, v1 = n-2. Everything is fictional.
+supported:
+  v3: {position: "n",   notable_changes: [response cache (Team G), provider failover default ON, citations required by default, feedback capture, tenant safety policy overrides, tune.rewrite.mode default fixed]}
+  v2: {position: "n-1", notable_changes: [One-Way UI (Team U) added, /v2/ask contract without session_id, per-tenant rate limit at LLM gateway, tune.rewrite.mode introduced (default history_aware), second retry attempt]}
+  v1: {position: "n-2", notable_changes: [baseline Interactive UI flow only, provider failover OFF, single attempt (no retry), silent adapter fallback]}
+upgrade_note: "Customers may stay on n-2. A fix that needs a newer flag is NOT available to them; recommend a different mitigation or an upgrade."

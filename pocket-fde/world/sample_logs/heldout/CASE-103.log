@@ -1,0 +1,8 @@
+# CASE-103 (evidence that EXISTS in prod for this incident; hidden from the agent)
+2025-03-12T10:00:00.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=5 rewrite_mode=history_aware top_k_effective=5
+[adapter] 2025-03-12T10:00:00.125Z trace=tr-7f3a91 tenant=t-stark adapter_selected=adapter-t-stark
+ts=2025-03-12T10:00:00.145Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-a latency_ms=11000 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=PASS code=-
+p.final status=ok redactions=0
+2025-03-12T10:00:08.000Z INFO ui-r req=req-3a91 tenant=t-stark latency_ms=8000 status=error
+2025-03-12T10:00:08.000Z WARN ui-r req=req-3a91 error_code=UI_TIMEOUT

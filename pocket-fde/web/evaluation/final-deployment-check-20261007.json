@@ -1,0 +1,332 @@
+{
+  "deployment": "https://pocket-goytn5sj8-adarshs-projects-f822047a.vercel.app",
+  "commit": "72d2b0e",
+  "checks": [
+    {
+      "path": "/api/status",
+      "status": 200
+    },
+    {
+      "path": "/api/access",
+      "status": 200
+    },
+    {
+      "path": "/api/status",
+      "status": 200
+    },
+    {
+      "path": "/api/context",
+      "status": 200
+    },
+    {
+      "path": "/api/analyze",
+      "status": 200
+    },
+    {
+      "path": "/api/history/01791353594841055740-107c4e172af6",
+      "status": 200
+    }
+  ],
+  "configuration": {
+    "provider": "gemini",
+    "label": "Gemini",
+    "model": "gemini-3.5-flash",
+    "fallback_model": "gemini-flash-lite-latest",
+    "ready": true,
+    "message": "Ready to analyze"
+  },
+  "analysis": {
+    "case": "CASE-107",
+    "version": "v3",
+    "owner": "G",
+    "expected_owner": "G",
+    "owner_correct": true,
+    "escalated": false,
+    "expected_escalate": false,
+    "escalation_correct": true,
+    "questions": 4,
+    "diagnostics_complete": true,
+    "question_topics_covered": [
+      "cache hit/miss",
+      "time of settings change vs bad answers"
+    ],
+    "question_topics_expected": [
+      "cache hit/miss",
+      "time of settings change vs bad answers",
+      "trace id of a stale answer"
+    ],
+    "evidence_covered": [
+      "g.cache",
+      "b.config_change",
+      "rag.cache.invalidate_on_tune_change"
+    ],
+    "evidence_expected": [
+      "g.cache",
+      "b.config_change",
+      "rag.cache.invalidate_on_tune_change"
+    ],
+    "version_valid": true,
+    "invalid_fix_flags": [],
+    "citations_present": true,
+    "citations_known": true,
+    "unretrieved_citations": [],
+    "invented_names": [],
+    "tokens": 4767,
+    "latency_s": 4.1,
+    "repair_calls": 0,
+    "expected_root_cause": "v3 response cache is not invalidated after the Tune change (rag.cache.invalidate_on_tune_change=false), serving stale answers.",
+    "response": {
+      "result": {
+        "case_id": "CASE-107",
+        "retrieval": {
+          "ids": [
+            "CARD-007",
+            "FLAG-CHANGE:validation.citations.required",
+            "DOC:common_issues:1-empty-answers-one-way-ui-only",
+            "DOC:getting_started:routing-incidents",
+            "DOC:getting_started:i-have-a-problem-with-my-assistant",
+            "DOC:support:how-to-file-a-support-ticket",
+            "CARD-011",
+            "DOC:features:observability-what-we-log"
+          ],
+          "weak": false,
+          "sem_name": "tfidf",
+          "unreviewed_used": []
+        },
+        "owning_team": "G",
+        "owner_contact": "rag-oncall",
+        "confidence": "medium",
+        "reasoning": "Customer Pied Piper on v3 reports that after raising their retrieval depth, some answers still behave like the old setting while others are right [CASE:CASE-107]. This symptom closely matches [CARD-007], where v3 response cache keyed by query+tenant+tune-hash is not invalidated on Tune changes (rag.cache.invalidate_on_tune_change=false), causing intermittent stale answers alongside correct ones. However, since cache hit/miss evidence has not been pulled yet for this specific case, confidence is medium.",
+        "hypotheses": [
+          {
+            "text": "The v3 response cache is serving stale answers because rag.cache.invalidate_on_tune_change is set to false following the retrieval depth change.",
+            "citations": [
+              "CARD-007",
+              "CASE:CASE-107"
+            ],
+            "confidence": "medium"
+          },
+          {
+            "text": "An incorrect or un-migrated tenant-level override for retrieval depth is causing conflicting behavior across different queries.",
+            "citations": [
+              "CASE:CASE-107"
+            ],
+            "confidence": "low"
+          }
+        ],
+        "questions": [
+          {
+            "text": "Do the cache logs in g.cache show cache hits for the queries returning stale answers after the retrieval depth change?",
+            "evidence": "g.cache"
+          },
+          {
+            "text": "Was a configuration change recorded in b.config_change immediately before the retrieval behavior inconsistency started?",
+            "evidence": "b.config_change"
+          },
+          {
+            "text": "Are the affected queries failing intermittently for the same user session, or do they consistently return stale results across different sessions?",
+            "evidence": "r.request"
+          },
+          {
+            "text": "Can we enable obs.tune_b.effective_params_log temporarily for tenant Pied Piper to verify if the effective tune parameters match the new retrieval depth on failing requests?",
+            "evidence": "obs.tune_b.effective_params_log"
+          }
+        ],
+        "logs_to_check": [
+          {
+            "stream": "g.cache",
+            "team": "G",
+            "on_in_prod": true,
+            "enable_flag": null,
+            "caveat": null
+          },
+          {
+            "stream": "b.config_change",
+            "team": "B",
+            "on_in_prod": true,
+            "enable_flag": null,
+            "caveat": null
+          },
+          {
+            "stream": "r.request",
+            "team": "R",
+            "on_in_prod": true,
+            "enable_flag": null,
+            "caveat": null
+          }
+        ],
+        "flags_to_check": [
+          "rag.cache.invalidate_on_tune_change",
+          "tune.top_k",
+          "rag.cache.enabled"
+        ],
+        "recommended_flags": [],
+        "recommended_fix": "Purge tenant cache and set rag.cache.invalidate_on_tune_change=true (v3 only) if cache logs confirm stale hits [CARD-007].",
+        "version_caveat": "Applies to v3 where response cache invalidation behavior on tune changes can retain old results if disabled [CARD-007].",
+        "do_not_apply": [
+          "validation.citation_check"
+        ],
+        "handover": {
+          "case_id": "CASE-107",
+          "from_team": "support",
+          "to_team": "G",
+          "why_this_team": "Team G owns RAG flow behavior, caching mechanisms, and retrieval settings on v3 [CARD-007].",
+          "checked_and_ruled_out": "None",
+          "trace_ids": [],
+          "version_and_config": "v3 standard tier; retrieval depth was recently raised [CASE:CASE-107].",
+          "question_for_receiver": "Do g.cache logs confirm cache hits for the queries returning old-style answers?",
+          "suggested_next_action": "Check g.cache hit/miss status and b.config_change timestamps for tenant Pied Piper.",
+          "bounces": 0
+        },
+        "escalate": false,
+        "escalation_reason": "",
+        "capture_brief": "",
+        "diagnostics_complete": true,
+        "model_answer_valid": true,
+        "grounding_issues": [],
+        "invented_names": [],
+        "cost": {
+          "steps": 2,
+          "tokens": 4767,
+          "calls": [
+            {
+              "purpose": "triage",
+              "tier": "frontier",
+              "in": 3928,
+              "out": 839,
+              "latency_s": 4.08,
+              "provider": "gemini:gemini-flash-lite-latest"
+            }
+          ]
+        }
+      },
+      "sources": [
+        {
+          "id": "CARD-007",
+          "kind": "card",
+          "text": "symptom: Intermittent stale (old-style) answers returned for a subset of queries on v3 after a retrieval settings change; other queries returned correct answers simultaneously.\nowning team: G\nroot cause: v3 response cache keyed by query+tenant+tune-hash is not invalidated on Tune changes (rag.cache.invalidate_on_tune_change=false), so old answers are served.\nconfig: rag.cache.enabled, rag.cache.invalidate_on_tune_change, tune.top_k\nevidence checked: g.cache hit_or_miss=hit; no q.invocation for the trace; b.config_change shortly before\nruled out: \nfix: Purge tenant cache; set rag.cache.invalidate_on_tune_change=true (v3 only).\ndetection tip: None\naffected versions: v3",
+          "versions": [
+            "v3"
+          ],
+          "status": "approved",
+          "version_match": true,
+          "source_path": null,
+          "caveat": ""
+        },
+        {
+          "id": "FLAG-CHANGE:validation.citations.required",
+          "kind": "flag",
+          "text": "renamed or introduced: old=validation.citation_check new=validation.citations.required changed in v3. Setting the old name on v3 has no effect; setting the new name on v1/v2 has no effect",
+          "versions": [
+            "v1",
+            "v2",
+            "v3"
+          ],
+          "status": "approved",
+          "version_match": true,
+          "source_path": null,
+          "caveat": ""
+        },
+        {
+          "id": "DOC:common_issues:1-empty-answers-one-way-ui-only",
+          "kind": "doc",
+          "text": "Customer guide: 1. Empty Answers (One-Way UI Only)\n**You see:** \"I don't have enough information to answer that.\"\n\n**Why this happens:** One-Way UI submits single queries without conversation history. Some models expect context from previous turns.\n\n**Quick fix:**\n- Provide more detail in your query. Instead of \"What about caching?\", say \"We're using a distributed system with Redis. How do we handle cache invalidation?\"\n- If it persists, contact support with your exact query text.\n\n**What the team checks:**\n- Is `tune.rewrite.mode` set to `history_aware`? (Wrong for one-shot queries.)\n- Is retrieval returning enough chunks? (Check `tune.top_k`.)\n- Is the adapter matching your tenant? (Some tenants fall back to base model.)\n\n---",
+          "versions": [
+            "v1",
+            "v2",
+            "v3"
+          ],
+          "status": "approved",
+          "version_match": true,
+          "source_path": "docs/customer/common_issues.md",
+          "caveat": "This guide may discuss multiple versions; confirm each feature's stated version before applying it."
+        },
+        {
+          "id": "DOC:getting_started:routing-incidents",
+          "kind": "doc",
+          "text": "Customer guide: Routing Incidents\nWhen a customer reports an issue, ask yourself:\n\n| **Symptom** | **Most Likely Team** | **Evidence to Pull** |\n|---|---|---|\n| Wrong answers / bad retrieval | Team G (RAG) or Team B (Tune config) | Retrieval logs, config flags |\n| Slow / timeout | Team Q (LLM Gateway) or PLATFORM | Latency logs, rate-limit events |\n| Empty answers (One-Way only) | Team B or Team G (rewrite mode) | Rewrite logs, session context |\n| Answers inconsistent / wrong sometimes | Team G (cache, v3) or Team E (adapter) | Cache hit/miss logs, adapter selection |",
+          "versions": [
+            "v1",
+            "v2",
+            "v3"
+          ],
+          "status": "approved",
+          "version_match": true,
+          "source_path": "docs/customer/getting_started.md",
+          "caveat": "This guide may discuss multiple versions; confirm each feature's stated version before applying it."
+        },
+        {
+          "id": "DOC:getting_started:i-have-a-problem-with-my-assistant",
+          "kind": "doc",
+          "text": "Customer guide: I have a problem with my assistant\n**Your assistant is giving wrong answers?** \u2192 Your issue likely originates in the Retrieval or Model layer. The assistant is retrieving the wrong context or the model is hallucinating.\n\n**Your assistant is slow?** \u2192 This is a timeout or rate-limiting issue, usually in the LLM gateway or platform layer.\n\n**Your assistant returns empty answers?** \u2192 One-Way UI customers often see this with single-shot queries. Interactive UI users experience this when conversation history isn't being passed correctly.",
+          "versions": [
+            "v1",
+            "v2",
+            "v3"
+          ],
+          "status": "approved",
+          "version_match": true,
+          "source_path": "docs/customer/getting_started.md",
+          "caveat": "This guide may discuss multiple versions; confirm each feature's stated version before applying it."
+        },
+        {
+          "id": "DOC:support:how-to-file-a-support-ticket",
+          "kind": "doc",
+          "text": "Customer guide: How to File a Support Ticket\n**What we need:**\n\n1. **Incident Title**\n   - e.g., \"One-Way widget returns empty answers\"\n   - e.g., \"Chat is slow after yesterday's config change\"\n\n2. **Symptoms**\n   - What are you seeing? (error message, wrong answer, timeout, etc.)\n   - When did it start? (exact time or relative, e.g., \"after we updated our query\")\n   - Does it affect all users or specific ones?\n\n3. **Your Setup**\n   - Tenant ID\n   - Platform version (v1, v2, or v3)\n   - UI mode (interactive chat or one-way)\n   - Are you using a custom adapter? (optional)\n\n4. **Evidence**\n   - Exact query that failed (if safe to share)\n   - Error codes or messages\n   - Timestamps\n   - Frequency (one-time, recurring, intermittent?)\n\n**Example ticket:**\n```\nTitle: One-Way queries timeout after 3PM daily\n\nSymptoms: \n  Customers report timeouts (20s+) on one-way queries starting at 3PM, \n  resolves by 5PM. Interactive chat is unaffected.\n\nSetup:\n  Tenant: acme-logistics-v2\n  Version: v2\n  Mode: One-Way UI embed in customer portal\n\nEvidence:\n  Error: \"Request timeout at 20000ms\"\n  Timestamps: Oct 6, 3:15 PM, 3:47 PM, 4:22 PM\n  Frequency: Every day around 3 PM\n```\n\n---",
+          "versions": [
+            "v1",
+            "v2",
+            "v3"
+          ],
+          "status": "approved",
+          "version_match": true,
+          "source_path": "docs/customer/support.md",
+          "caveat": "This guide may discuss multiple versions; confirm each feature's stated version before applying it."
+        },
+        {
+          "id": "CARD-011",
+          "kind": "card",
+          "text": "symptom: Umbrella Media One-Way UI failures could not be traced: support only had a request ID with no trace ID, while gateway logs are keyed by trace ID, breaking the correlation chain.\nowning team: U\nroot cause: One-Way UI drops trace_id in prod and logs only request id and status; evidence gap, not a defect.\nconfig: obs.oneway_u.verbose_log\nevidence checked: u.verbose (after enabling); q.ratelimit by timestamp\nruled out: \nfix: Temporarily enable obs.oneway_u.verbose_log (global, log volume risk) and correlate by timestamp.\ndetection tip: None\naffected versions: v2, v3",
+          "versions": [
+            "v2",
+            "v3"
+          ],
+          "status": "approved",
+          "version_match": true,
+          "source_path": null,
+          "caveat": ""
+        },
+        {
+          "id": "DOC:features:observability-what-we-log",
+          "kind": "doc",
+          "text": "Customer guide: Observability (What We Log)\nWe log:\n- Your request timestamps and response times\n- Error messages and codes\n- Model provider info (in case we switch providers mid-session)\n- Citations and sources (if citations are required in your version)\n\n**We don't log:**\n- Your actual questions or answers (too much PII risk)\n- Retrieval results (unless you have a support incident)\n\nIf you need detailed debugging, contact support and we can enable debug logging temporarily.\n\n---\n\n**Questions?** \u2192 [Getting Started](./getting_started.md) or [Common Issues](./common_issues.md)",
+          "versions": [
+            "v1",
+            "v2",
+            "v3"
+          ],
+          "status": "approved",
+          "version_match": true,
+          "source_path": "docs/customer/features.md",
+          "caveat": "This guide may discuss multiple versions; confirm each feature's stated version before applying it."
+        }
+      ],
+      "team_name": "RAG Flow",
+      "elapsed_s": 4.1,
+      "model": "gemini-flash-lite-latest",
+      "models_used": [
+        "gemini-flash-lite-latest"
+      ],
+      "requested_model": "gemini-3.5-flash",
+      "fallback_used": true,
+      "provider": "Gemini",
+      "retrieval": "BM25 + TF-IDF",
+      "retrieval_mode": "surya",
+      "knowledge_revision": "ca58f9a827ad2907d3f6ca1f86eaadf396a792aa755bdb9032ccbbdfead5e4ef",
+      "embedding_model": null,
+      "embedding_revision": null,
+      "saved_id": "01791353594841055740-107c4e172af6",
+      "save_status": "Saved privately"
+    }
+  }
+}

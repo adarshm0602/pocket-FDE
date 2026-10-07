@@ -1,0 +1,90 @@
+{
+  "id": "CASE-105",
+  "title": "Random failures in embedded widget",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-wonka",
+  "customer": "Wonka Labs",
+  "version": "v2",
+  "description": "Wonka Labs reports random failures in the embedded widget during their bulk summarisation runs. Customer ID WL-8841. Widget error is ERR_UPSTREAM; the chat app is fine.",
+  "provided_evidence": [
+    "u.request id=u-3a91 status=error"
+  ],
+  "ground_truth": {
+    "owning_team": "Q",
+    "root_cause": "Per-tenant rate limit (60 rpm, v2+) exceeded by bulk runs; One-Way UI has no retry so the 429 surfaces as ERR_UPSTREAM.",
+    "false_lead": "U",
+    "first_guess_wrong_team": "U",
+    "expected_redirect": [
+      "U",
+      "Q"
+    ],
+    "expected_escalate": false,
+    "key_questions_needed": [
+      {
+        "topic": "request volume / rate during runs",
+        "any_of": [
+          "rate",
+          "rpm",
+          "volume",
+          "bulk"
+        ]
+      },
+      {
+        "topic": "gateway rate limit events",
+        "any_of": [
+          "q.ratelimit",
+          "rate limit",
+          "429"
+        ]
+      },
+      {
+        "topic": "trace id / timestamps",
+        "any_of": [
+          "timestamp",
+          "trace",
+          "time"
+        ]
+      }
+    ],
+    "needed_evidence": [
+      "q.ratelimit",
+      "u.request",
+      "llm.ratelimit.per_tenant_rpm"
+    ],
+    "version_caveat": "On v3 provider failover would mask this; on v2 raise llm.ratelimit.per_tenant_rpm or spread load. llm.failover.enabled is not available on v2.",
+    "invalid_fix_flags": [
+      "llm.failover.enabled"
+    ],
+    "scenario": {
+      "version": "v2",
+      "tenant_id": "t-wonka",
+      "ui_mode": "oneway",
+      "has_session": false,
+      "query": "How do I reset the device?",
+      "provider_latency_ms": 800,
+      "secondary_latency_ms": 800,
+      "tenant_rpm_load": 90,
+      "overrides": {
+        "tune.rewrite.mode": "single_shot"
+      },
+      "config_changes": [
+        {
+          "flag": "tune.rewrite.mode",
+          "old": "history_aware",
+          "new": "single_shot",
+          "when": "2025-02-20T10:00:00Z",
+          "by": "ops-bot"
+        }
+      ],
+      "relevant_doc_rank": 3,
+      "adapter_present": null,
+      "source_metadata": null,
+      "cache_stale": false,
+      "obs_enabled": [],
+      "trace_id": "tr-7f3a91"
+    },
+    "observed_symptom": "ERR_UPSTREAM",
+    "observed_error_code": "LLM_RATE_LIMITED"
+  }
+}

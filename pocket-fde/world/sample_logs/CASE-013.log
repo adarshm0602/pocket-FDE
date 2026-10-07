@@ -1,0 +1,6 @@
+# CASE-013 v=v2 symptom='ERR_UPSTREAM' code=LLM_RATE_LIMITED
+2025-03-12T10:00:00.005Z INFO rag-flow g.rewrite trace_id=tr-7f3a91 rewrite_mode=single_shot had_session=false
+2025-03-12T10:00:00.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=5 rewrite_mode=single_shot top_k_effective=5
+[adapter] 2025-03-12T10:00:00.125Z trace=tr-7f3a91 tenant=t-umbrella adapter_selected=base
+ts=2025-03-12T10:00:00.145Z level=WARN svc=llm-gw trace_id=tr-7f3a91 tenant=t-umbrella rpm=95 limit=60
+u.request id=u-3a91 status=error

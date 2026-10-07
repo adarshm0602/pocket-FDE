@@ -1,0 +1,19 @@
+id: CARD-013
+source_case: CASE-013
+symptom: Umbrella Media One-Way batch jobs fail in bursts of errors every night around
+  02:00
+affected_versions:
+- v2
+owning_team: Q
+root_cause: Nightly batch exceeds llm.ratelimit.per_tenant_rpm=60 (observed 95 rpm).
+config_involved:
+- llm.ratelimit.per_tenant_rpm
+evidence_checked:
+- q.ratelimit rpm=95 limit=60
+ruled_out: null
+fix: Raised per-tenant rpm to 120 and asked the customer to spread the batch.
+detection_tip: null
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

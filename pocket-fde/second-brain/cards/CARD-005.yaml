@@ -1,0 +1,23 @@
+id: CARD-005
+source_case: CASE-005
+symptom: Answers stopped including document references for tenant Stark Industries
+  on v1
+affected_versions:
+- v1
+- v2
+- v3
+owning_team: B
+root_cause: Tenant override tune.top_k=1; the relevant doc ranks 3rd. The restart
+  refreshed config which masked the issue only briefly.
+config_involved:
+- tune.top_k
+evidence_checked:
+- g.retrieval n_chunks=1
+- b.config_change tune.top_k 5->1
+ruled_out: null
+fix: Reset tune.top_k override to default 5 for the tenant.
+detection_tip: null
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

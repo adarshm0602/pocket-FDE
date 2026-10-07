@@ -1,0 +1,24 @@
+id: CARD-014
+source_case: CASE-014
+symptom: After tenant migration, Wayne Foods (v3) responses reverted to base (untuned)
+  tone instead of using the tenant's fine-tuned adapter.
+affected_versions:
+- v3
+owning_team: E
+root_cause: The tenant's fine-tuned adapter was not re-registered after migration,
+  causing the system to silently fall back to the base model for Wayne Foods on v3.
+config_involved:
+- ft.adapter.fallback_to_base
+evidence_checked:
+- e.adapter log stream emitted WARN fallback_to_base reason=no_adapter_for_tenant
+  (v3 only).
+ruled_out:
+- model quality
+fix: Registered the missing adapter for the Wayne Foods tenant in the E adapter registry.
+detection_tip: After any tenant migration on v3, check e.adapter for WARN entries
+  with fallback_to_base reason=no_adapter_for_tenant — this indicates the adapter
+  was not carried over and the system silently degraded to base.
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

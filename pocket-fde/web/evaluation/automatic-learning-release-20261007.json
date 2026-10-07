@@ -1,0 +1,60 @@
+{
+  "deployment": "https://pocket-m63vl3d7t-adarshs-projects-f822047a.vercel.app",
+  "application_commit": "05d41a3",
+  "checks": {
+    "new_ui": true,
+    "both_search_modes_ready": true,
+    "anonymous_brain_gated": true,
+    "existing_access_code": true,
+    "automatic_capture": true,
+    "private_analysis_saved": true,
+    "owner_and_questions": true,
+    "provisional_draft_persists": true,
+    "pending_excluded_from_library": true,
+    "surya_excludes_pending": true,
+    "hybrid_excludes_pending": true,
+    "same_reviewed_corpus": true,
+    "private_reload": true,
+    "retry_reuses_draft": true,
+    "other_workspace_cannot_read_history": true,
+    "shared_review_across_browsers": true,
+    "anonymous_sources_exclude_shared_learning": true
+  },
+  "analysis": {
+    "case": "CASE-101",
+    "owner": "B",
+    "questions": 4,
+    "model": "gemini-3.5-flash",
+    "fallback_used": false,
+    "tokens": 10077,
+    "learning_id": "d043b7842909835db004695725a08fce",
+    "learning_status": "pending"
+  },
+  "human_decision": "Pending; no automated approval",
+  "same_access_code": true,
+  "deployment_id": "dpl_CFJ1q1gfsQaTufuHYvEqkU5qu7wQ",
+  "public_url": "https://pocket-fde-adarsh.vercel.app/",
+  "public_checks": {
+    "new_ui_and_script": true,
+    "both_modes_ready": true,
+    "anonymous_brain_gated": true,
+    "browser_pending_draft_visible": true,
+    "mobile_390px_no_overflow": true,
+    "browser_errors": 0,
+    "hosted_error_entries": 0
+  },
+  "regression_tests": 104,
+  "isolated_cloud_checks": {
+    "namespace": "second-brain-auto-check-cb25cbb7d61b",
+    "checks": {
+      "private_capture": true,
+      "pending_excluded": true,
+      "deduplicates_across_instances": true,
+      "approval_preserved": true,
+      "immutable_decision": true,
+      "new_evidence_new_draft": true,
+      "rejection_preserved": true
+    },
+    "affects_live_knowledge": false
+  }
+}

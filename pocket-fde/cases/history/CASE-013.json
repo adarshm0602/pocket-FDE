@@ -1,0 +1,17 @@
+{
+  "id": "CASE-013",
+  "title": "Batch jobs failing at the gateway",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-umbrella",
+  "customer": "Umbrella Media",
+  "version": "v2",
+  "description": "Umbrella Media One-Way batch jobs fail in bursts of errors every night around 02:00.",
+  "teams_touched": [
+    "U",
+    "Q"
+  ],
+  "bounces": 1,
+  "resolution_notes": "ratelimit thing, raised limit",
+  "quality": "vague"
+}

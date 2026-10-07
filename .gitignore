@@ -1,0 +1,24 @@
+# Credentials, local workspaces and generated caches
+.env
+.env.*
+.env*
+*.access.txt
+.vercel/
+.venv/
+.pytest_cache/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+pocket-fde/.models/
+personal-notes/
+
+# Retired experiment data may still exist locally; never publish it.
+vendor/
+dataset/
+pipeline/
+
+# Regeneratable prompts and intermediate evaluation runs.
+pocket-fde/eval/results/*outbound*.jsonl
+pocket-fde/eval/results/runs/
+pocket-fde/web/evaluation/20??????-*/

@@ -1,0 +1,18 @@
+{
+  "id": "CASE-011",
+  "title": "Cannot trace One-Way failures",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-umbrella",
+  "customer": "Umbrella Media",
+  "version": "v2",
+  "description": "Umbrella Media One-Way UI failures cannot be traced: support only has a request id, no trace id, and the gateway logs are keyed by trace id.",
+  "teams_touched": [
+    "U",
+    "Q",
+    "G"
+  ],
+  "bounces": 1,
+  "resolution_notes": "enabled logging, found it",
+  "quality": "vague"
+}

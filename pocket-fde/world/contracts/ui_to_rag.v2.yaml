@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: ui_to_rag.v2
+  version: v2
+  description: hop R|U -> G
+paths:
+  /v2/ask:
+    post:
+      summary: POST /v2/ask
+      requestBody:
+        $ref: '#/components/schemas/Body'
+components:
+  schemas:
+    Body:
+      type: object
+      required:
+      - query
+      - tenant_id
+      - ui_mode
+      - trace_id
+      properties:
+        query:
+          description: string
+        tenant_id:
+          description: string
+        session_id:
+          description: string (optional; absent for One-Way UI)
+        ui_mode:
+          description: interactive|oneway
+        trace_id:
+          description: string

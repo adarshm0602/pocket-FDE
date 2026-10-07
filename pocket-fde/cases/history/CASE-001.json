@@ -1,0 +1,18 @@
+{
+  "id": "CASE-001",
+  "title": "One-Way widget gives empty/odd answers, chat UI fine",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-umbrella",
+  "customer": "Umbrella Media",
+  "version": "v2",
+  "description": "Umbrella Media says the embedded One-Way widget returns 'I don't have enough information' for questions that the chat UI answers fine. Same tenant, same question. Contact: ops@umbrellamedia.example.",
+  "teams_touched": [
+    "U",
+    "R",
+    "B"
+  ],
+  "bounces": 2,
+  "resolution_notes": "config issue fixed",
+  "quality": "vague"
+}

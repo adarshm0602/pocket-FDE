@@ -1,0 +1,26 @@
+id: CARD-008
+source_case: CASE-008
+symptom: All queries returned 'something went wrong' for Globex Bank immediately after
+  their corpus was re-indexed over the weekend.
+affected_versions:
+- v3
+owning_team: G
+root_cause: The re-index pipeline dropped source metadata from all documents, leaving
+  source_ids empty. On v3, validation.citations.required is enforced, so the validator
+  rejected every query with VAL_REJECT_042 because no valid citation sources could
+  be resolved.
+config_involved:
+- validation.citations.required
+evidence_checked:
+- v.verdict
+ruled_out:
+- validation bug
+- LLM gateway
+fix: Re-indexed the Globex Bank corpus with source metadata intact, restoring populated
+  source_ids so citation validation passes.
+detection_tip: VAL_REJECT_042 means no citations; enable obs.rag_g.masked_chunk_id_log
+  to see empty chunk/source ids.
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

@@ -1,0 +1,9 @@
+# CASE-102 (evidence that EXISTS in prod for this incident; hidden from the agent)
+2025-03-12T10:00:00.000Z INFO rag-flow g.cache trace_id=tr-7f3a91 hit_or_miss=miss
+{"ts": "2025-03-09T08:00:00Z", "evt": "config_change", "tenant": "t-wayne", "flag": "tune.rewrite.mode", "old": "single_shot", "new": "history_aware", "by": "migration-script"}
+2025-03-12T10:00:00.005Z INFO rag-flow g.rewrite trace_id=tr-7f3a91 rewrite_mode=history_aware had_session=false
+2025-03-12T10:00:00.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=0 rewrite_mode=history_aware top_k_effective=8
+[adapter] 2025-03-12T10:00:00.125Z trace=tr-7f3a91 tenant=t-wayne adapter_selected=adapter-t-wayne
+ts=2025-03-12T10:00:00.145Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-a latency_ms=800 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=FAIL code=VAL_REJECT_042
+u.request id=u-3a91 status=error

@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: post_to_ui.v1
+  version: v1
+  description: hop P -> R
+paths:
+  response:
+    post:
+      summary: response
+      requestBody:
+        $ref: '#/components/schemas/Body'
+components:
+  schemas:
+    Body:
+      type: object
+      required:
+      - final_text
+      - citations
+      - followups
+      - trace_id
+      properties:
+        final_text:
+          description: string
+        citations:
+          description: array
+        followups:
+          description: array (interactive only)
+        trace_id:
+          description: string

@@ -1,0 +1,80 @@
+{
+  "id": "CASE-103",
+  "title": "Timeouts on chat for industrial customer",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-stark",
+  "customer": "Stark Industries",
+  "version": "v1",
+  "description": "Stark Industries (v1) chat users get 'something went wrong' on longer questions, sometimes after about 8 seconds. Support suspects the LLM gateway is slow and wants the gateway team to add a fallback provider.",
+  "provided_evidence": [
+    "2025-03-12T10:00:08.000Z INFO ui-r req=req-3a91 tenant=t-stark latency_ms=8000 status=error",
+    "2025-03-12T10:00:08.000Z WARN ui-r req=req-3a91 error_code=UI_TIMEOUT"
+  ],
+  "ground_truth": {
+    "owning_team": "PLATFORM",
+    "root_cause": "Provider latency (11s) below llm.timeout_ms but above platform.http.timeout_ms (8s) on v1; the gateway reports success.",
+    "false_lead": "Q",
+    "first_guess_wrong_team": "Q",
+    "expected_redirect": [
+      "Q",
+      "PLATFORM"
+    ],
+    "expected_escalate": false,
+    "key_questions_needed": [
+      {
+        "topic": "how long before the error / latency",
+        "any_of": [
+          "seconds",
+          "latency",
+          "how long"
+        ]
+      },
+      {
+        "topic": "gateway outcome for the trace",
+        "any_of": [
+          "q.invocation",
+          "gateway",
+          "finish_reason"
+        ]
+      },
+      {
+        "topic": "trace id",
+        "any_of": [
+          "trace"
+        ]
+      }
+    ],
+    "needed_evidence": [
+      "q.invocation",
+      "r.ui_error",
+      "platform.http.timeout_ms"
+    ],
+    "version_caveat": "llm.failover.enabled does not exist on v1; mitigation is raising platform.http.timeout_ms, or upgrade.",
+    "invalid_fix_flags": [
+      "llm.failover.enabled",
+      "llm.ratelimit.per_tenant_rpm",
+      "rag.cache.invalidate_on_tune_change"
+    ],
+    "scenario": {
+      "version": "v1",
+      "tenant_id": "t-stark",
+      "ui_mode": "interactive",
+      "has_session": true,
+      "query": "How do I reset the device?",
+      "provider_latency_ms": 11000,
+      "secondary_latency_ms": 800,
+      "tenant_rpm_load": 10,
+      "overrides": {},
+      "config_changes": [],
+      "relevant_doc_rank": 3,
+      "adapter_present": null,
+      "source_metadata": null,
+      "cache_stale": false,
+      "obs_enabled": [],
+      "trace_id": "tr-7f3a91"
+    },
+    "observed_symptom": "Sorry, something went wrong. Please try again.",
+    "observed_error_code": "UI_TIMEOUT"
+  }
+}

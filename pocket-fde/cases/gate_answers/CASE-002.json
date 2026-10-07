@@ -1,0 +1,24 @@
+{
+  "symptom": "Generic error / timeout on slow answers",
+  "owning_team": "PLATFORM",
+  "affected_versions": [
+    "v1",
+    "v2",
+    "v3"
+  ],
+  "root_cause": "Provider latency (9.5s) is below llm.timeout_ms (20s) but above platform.http.timeout_ms (8s), so the UI hop times out while the gateway logs success.",
+  "config_involved": [
+    "platform.http.timeout_ms",
+    "llm.timeout_ms"
+  ],
+  "evidence_checked": [
+    "q.invocation: latency_ms=9500 finish_reason=stop",
+    "r.ui_error / u.request status=error"
+  ],
+  "ruled_out": [
+    "LLM gateway fault",
+    "validation"
+  ],
+  "fix": "Raise platform.http.timeout_ms for the tenant above observed provider latency (platform on-call owns it).",
+  "detection_tip": "If q.invocation shows success but the UI shows an error, compare latency_ms with platform.http.timeout_ms."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "CASE-014",
+  "title": "Tuned answers missing after migration",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-wayne",
+  "customer": "Wayne Foods",
+  "version": "v3",
+  "description": "Wayne Foods (v3): after migrating their tenant, answers lost the tuned tone.",
+  "teams_touched": [
+    "Q",
+    "E"
+  ],
+  "bounces": 1,
+  "resolution_notes": "e.adapter logs a WARN fallback_to_base reason=no_adapter_for_tenant (v3 only). Adapter not registered after migration. Registered it.",
+  "quality": "adequate"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "CASE-012",
+  "title": "Timeouts persist after enabling failover",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-acme",
+  "customer": "Acme Logistics",
+  "version": "v2",
+  "description": "Acme Logistics (v2): chat UI times out on slow answers. A colleague set llm.failover.enabled=true for the tenant per a v3 doc; no change.",
+  "teams_touched": [
+    "R",
+    "Q",
+    "PLATFORM"
+  ],
+  "bounces": 2,
+  "resolution_notes": "llm.failover.enabled does not exist on v2 (introduced in v3), so the override is ignored. Real cause: provider latency 11s vs platform.http.timeout_ms=8000. Fixed by raising platform.http.timeout_ms to 15000 for the tenant. Longer term: upgrade to v3 for failover.",
+  "quality": "good"
+}

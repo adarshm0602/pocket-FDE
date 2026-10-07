@@ -1,0 +1,20 @@
+{
+  "case_number": "CASE-001",
+  "title": "One-Way UI returning empty answers",
+  "description": "Acme Logistics: embedded One-Way widget returns 'not enough information' for simple questions. Chat UI answers the same questions fine. Started after recent deployment.",
+  "version": "v2",
+  "customer": "Acme Logistics",
+  "severity": "high",
+  "opened_at": "2026-10-06T10:30:00Z",
+  "evidence": {
+    "logs": [
+      "UI console error: retrieval_service timeout after 5s",
+      "Backend response code 200 but empty chunks array"
+    ],
+    "affected_queries": [
+      "How many shipments arrived yesterday?",
+      "What is the status of shipment #12345?"
+    ]
+  },
+  "team_suspicion": "tune-config or retrieval service"
+}

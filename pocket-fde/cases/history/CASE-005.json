@@ -1,0 +1,18 @@
+{
+  "id": "CASE-005",
+  "title": "Answers stopped using our docs",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-stark",
+  "customer": "Stark Industries",
+  "version": "v1",
+  "description": "Stark Industries (v1): answers lost document references since last week. Support restarted things, no change at first.",
+  "teams_touched": [
+    "G",
+    "Q",
+    "B"
+  ],
+  "bounces": 2,
+  "resolution_notes": "restarted rag and it worked",
+  "quality": "vague"
+}

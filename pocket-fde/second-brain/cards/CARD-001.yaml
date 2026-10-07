@@ -1,0 +1,22 @@
+id: CARD-001
+source_case: CASE-001
+symptom: One-Way widget returns 'I don't have enough information' for questions that
+  the chat UI answers correctly; same tenant (Umbrella Media), same question input.
+affected_versions:
+- v2
+owning_team: B
+root_cause: v2 default tune.rewrite.mode=history_aware. One-Way UI sends no session_id,
+  so the rewrite step has no history and produces an empty query; retrieval returns
+  0 chunks.
+config_involved:
+- tune.rewrite.mode
+evidence_checked:
+- 'g.rewrite log: had_session=false rewrite_mode=history_aware'
+- 'g.retrieval log: n_chunks=0'
+ruled_out: null
+fix: Set tenant override tune.rewrite.mode=single_shot. Fixed by default in v3.
+detection_tip: null
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

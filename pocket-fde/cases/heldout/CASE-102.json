@@ -1,0 +1,86 @@
+{
+  "id": "CASE-102",
+  "title": "One-Way odd answers continue after upgrade to v3",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-wayne",
+  "customer": "Wayne Foods",
+  "version": "v3",
+  "description": "Wayne Foods upgraded to v3 last week. Their One-Way widget now fails with ERR_UPSTREAM on most questions, though we were told the One-Way rewrite default was fixed in v3. Interactive chat is fine. Validation team says their rejections are 'working as intended' (citations are required on v3).",
+  "provided_evidence": [
+    "u.request id=u-3a91 status=error"
+  ],
+  "ground_truth": {
+    "owning_team": "B",
+    "root_cause": "A tenant-level override tune.rewrite.mode=history_aware (pinned during upgrade migration) overrides the fixed v3 default; with no session the rewrite is empty, no source ids are returned, and v3 citation validation rejects every response (VAL_REJECT_042).",
+    "false_lead": "V",
+    "first_guess_wrong_team": "U",
+    "expected_redirect": [
+      "U",
+      "V",
+      "B"
+    ],
+    "expected_escalate": false,
+    "key_questions_needed": [
+      {
+        "topic": "tenant overrides / config change history",
+        "any_of": [
+          "override",
+          "b.config_change",
+          "config change"
+        ]
+      },
+      {
+        "topic": "rewrite mode effective value",
+        "any_of": [
+          "rewrite",
+          "tune.rewrite.mode"
+        ]
+      },
+      {
+        "topic": "interactive vs one-way",
+        "any_of": [
+          "interactive"
+        ]
+      }
+    ],
+    "needed_evidence": [
+      "b.config_change",
+      "g.rewrite",
+      "v.verdict",
+      "tune.rewrite.mode"
+    ],
+    "version_caveat": "v3 default is already fixed; do not blindly apply the v2 'set single_shot' fix, remove the stale tenant override instead.",
+    "invalid_fix_flags": [],
+    "scenario": {
+      "version": "v3",
+      "tenant_id": "t-wayne",
+      "ui_mode": "oneway",
+      "has_session": false,
+      "query": "How do I reset the device?",
+      "provider_latency_ms": 800,
+      "secondary_latency_ms": 800,
+      "tenant_rpm_load": 10,
+      "overrides": {
+        "tune.rewrite.mode": "history_aware"
+      },
+      "config_changes": [
+        {
+          "flag": "tune.rewrite.mode",
+          "old": "single_shot",
+          "new": "history_aware",
+          "when": "2025-03-09T08:00:00Z",
+          "by": "migration-script"
+        }
+      ],
+      "relevant_doc_rank": 3,
+      "adapter_present": null,
+      "source_metadata": null,
+      "cache_stale": false,
+      "obs_enabled": [],
+      "trace_id": "tr-7f3a91"
+    },
+    "observed_symptom": "ERR_UPSTREAM",
+    "observed_error_code": "VAL_REJECT_042"
+  }
+}

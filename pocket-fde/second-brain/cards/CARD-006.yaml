@@ -1,0 +1,25 @@
+id: CARD-006
+source_case: CASE-006
+symptom: One-Way UI returns ERR_UPSTREAM intermittently, predominantly during the
+  afternoon batch window; Chat UI is largely unaffected.
+affected_versions:
+- v2
+owning_team: Q
+root_cause: Tenant RPM reached 85, exceeding the per-tenant gateway cap of 60, producing
+  429 responses. Because ui.retry.enabled=false, the One-Way UI surface had no retry
+  path and exposed the 429 directly as ERR_UPSTREAM.
+config_involved:
+- ui.retry.enabled
+- llm.ratelimit.per_tenant_rpm
+evidence_checked:
+- q.ratelimit
+ruled_out:
+- One-Way UI bug
+- validation
+fix: 'Interim: raised llm.ratelimit.per_tenant_rpm to 120 for the Umbrella Media tenant.'
+detection_tip: u.request has no error code; look for q.ratelimit lines at the same
+  time.
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

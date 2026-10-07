@@ -1,0 +1,22 @@
+{
+  "symptom": "Answer style changes mid-conversation",
+  "owning_team": "Q",
+  "affected_versions": [
+    "v3"
+  ],
+  "root_cause": "Provider failover (default ON in v3) switched to provider-b after a rate-limit event; provider-b has a different style.",
+  "config_involved": [
+    "llm.failover.enabled",
+    "llm.ratelimit.per_tenant_rpm"
+  ],
+  "evidence_checked": [
+    "q.ratelimit",
+    "q.failover provider-a->provider-b"
+  ],
+  "ruled_out": [
+    "adapter change",
+    "validation"
+  ],
+  "fix": "Works as designed; customer decides whether to disable failover or raise the rate limit.",
+  "detection_tip": "Look for q.failover lines (v3 only)."
+}

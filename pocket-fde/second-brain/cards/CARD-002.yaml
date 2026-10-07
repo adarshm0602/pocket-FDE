@@ -1,0 +1,27 @@
+id: CARD-002
+source_case: CASE-002
+symptom: One-Way UI returns ERR_UPSTREAM on long-running questions; Chat UI users
+  report 'timed out' (customer IP range 203.0.113.0/24)
+affected_versions:
+- v1
+- v2
+- v3
+owning_team: PLATFORM
+root_cause: Provider response latency (~9.5 s) exceeded the platform.http.timeout_ms
+  threshold (8 s), causing the UI hop to abort the request before the LLM gateway
+  response arrived
+config_involved:
+- platform.http.timeout_ms
+evidence_checked:
+- 'q.invocation: latency_ms=9500 finish_reason=stop'
+- r.ui_error / u.request status=error
+ruled_out:
+- LLM gateway failure — gateway was healthy and upstream responses completed successfully
+  at ~9.5 s
+fix: Raised platform.http.timeout_ms for the Wonka Labs tenant via PLATFORM on-call
+detection_tip: If q.invocation shows success but the UI shows an error, compare latency_ms
+  with platform.http.timeout_ms.
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

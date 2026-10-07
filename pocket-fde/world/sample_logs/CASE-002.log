@@ -1,0 +1,8 @@
+# CASE-002 v=v2 symptom='ERR_UPSTREAM' code=UI_TIMEOUT
+2025-03-12T10:00:00.005Z INFO rag-flow g.rewrite trace_id=tr-7f3a91 rewrite_mode=single_shot had_session=false
+2025-03-12T10:00:00.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=5 rewrite_mode=single_shot top_k_effective=5
+[adapter] 2025-03-12T10:00:00.125Z trace=tr-7f3a91 tenant=t-wonka adapter_selected=adapter-t-wonka
+ts=2025-03-12T10:00:00.145Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-a latency_ms=9500 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=PASS code=-
+p.final status=ok redactions=0
+u.request id=u-3a91 status=error

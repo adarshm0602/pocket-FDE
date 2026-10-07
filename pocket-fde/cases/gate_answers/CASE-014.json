@@ -1,0 +1,19 @@
+{
+  "symptom": "Tuned tone lost after migration",
+  "owning_team": "E",
+  "affected_versions": [
+    "v3"
+  ],
+  "root_cause": "No adapter registered for the migrated tenant; adapter layer fell back to the base model (v3 logs a WARN).",
+  "config_involved": [
+    "ft.adapter.fallback_to_base"
+  ],
+  "evidence_checked": [
+    "e.adapter WARN fallback_to_base"
+  ],
+  "ruled_out": [
+    "model quality"
+  ],
+  "fix": "Register the adapter for the tenant.",
+  "detection_tip": "e.adapter WARN fallback_to_base on v3."
+}

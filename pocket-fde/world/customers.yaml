@@ -1,0 +1,12 @@
+# Synthetic tenants. Names are used by redact.py as the customer-name list.
+tenants:
+  t-acme:      {name: Acme Logistics,   tier: enterprise, version: v2, has_adapter: true,  source_metadata: true}
+  t-northwind: {name: Northwind Retail, tier: standard,   version: v1, has_adapter: true,  source_metadata: true}
+  t-globex:    {name: Globex Bank,      tier: enterprise, version: v3, has_adapter: true,  source_metadata: true}
+  t-initech:   {name: Initech Health,   tier: enterprise, version: v3, has_adapter: false, source_metadata: true}
+  t-umbrella:  {name: Umbrella Media,   tier: standard,   version: v2, has_adapter: false, source_metadata: true}
+  t-hooli:     {name: Hooli Cloud,      tier: enterprise, version: v3, has_adapter: true,  source_metadata: false}
+  t-stark:     {name: Stark Industries, tier: enterprise, version: v1, has_adapter: true,  source_metadata: true}
+  t-wayne:     {name: Wayne Foods,      tier: standard,   version: v3, has_adapter: true,  source_metadata: true}
+  t-wonka:     {name: Wonka Labs,       tier: standard,   version: v2, has_adapter: true,  source_metadata: true}
+  t-piedpiper: {name: Pied Piper,       tier: standard,   version: v3, has_adapter: true,  source_metadata: true}

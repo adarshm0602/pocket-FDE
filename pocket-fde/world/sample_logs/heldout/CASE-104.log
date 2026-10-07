@@ -1,0 +1,15 @@
+# CASE-104 (evidence that EXISTS in prod for this incident; hidden from the agent)
+2025-03-12T10:00:00.000Z INFO rag-flow g.cache trace_id=tr-7f3a91 hit_or_miss=miss
+2025-03-12T10:00:00.005Z INFO rag-flow g.rewrite trace_id=tr-7f3a91 rewrite_mode=history_aware had_session=true
+2025-03-12T10:00:00.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=8 rewrite_mode=history_aware top_k_effective=8
+[adapter] 2025-03-12T10:00:00.125Z trace=tr-7f3a91 tenant=t-hooli adapter_selected=adapter-t-hooli
+ts=2025-03-12T10:00:00.145Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-a latency_ms=800 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=FAIL code=VAL_REJECT_042
+2025-03-12T10:00:00.960Z INFO rag-flow g.cache trace_id=tr-7f3a91 hit_or_miss=miss
+2025-03-12T10:00:00.965Z INFO rag-flow g.rewrite trace_id=tr-7f3a91 rewrite_mode=history_aware had_session=true
+2025-03-12T10:00:00.965Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=8 rewrite_mode=history_aware top_k_effective=8
+[adapter] 2025-03-12T10:00:01.085Z trace=tr-7f3a91 tenant=t-hooli adapter_selected=adapter-t-hooli
+ts=2025-03-12T10:00:01.105Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-a latency_ms=800 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=FAIL code=VAL_REJECT_042
+2025-03-12T10:00:01.920Z INFO ui-r req=req-3a91 tenant=t-hooli latency_ms=1920 status=error
+2025-03-12T10:00:01.920Z WARN ui-r req=req-3a91 error_code=VAL_REJECT_042

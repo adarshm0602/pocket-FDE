@@ -1,0 +1,88 @@
+{
+  "id": "CASE-108",
+  "title": "Assistant feels worse lately",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-northwind",
+  "customer": "Northwind Retail",
+  "version": "v1",
+  "description": "A Northwind Retail user said 'the assistant feels worse lately'. No example question, no trace id, no time given. Support has no further details and can reach the customer only through their account manager.",
+  "provided_evidence": [],
+  "ground_truth": {
+    "owning_team": "B",
+    "acceptable_owners": [
+      "B",
+      "G"
+    ],
+    "root_cause": "(Unknowable from the report.) Actual: tenant override tune.top_k=1, effective params not visible without the masked/volume log.",
+    "false_lead": null,
+    "first_guess_wrong_team": null,
+    "expected_redirect": [],
+    "expected_escalate": true,
+    "key_questions_needed": [
+      {
+        "topic": "example question and time",
+        "any_of": [
+          "example",
+          "question",
+          "when"
+        ]
+      },
+      {
+        "topic": "trace id",
+        "any_of": [
+          "trace"
+        ]
+      },
+      {
+        "topic": "config change history",
+        "any_of": [
+          "change",
+          "b.config_change",
+          "override"
+        ]
+      }
+    ],
+    "needed_evidence": [
+      "b.config_change",
+      "g.retrieval",
+      "obs.tune_b.effective_params_log"
+    ],
+    "version_caveat": "v1 has no rewrite mode, cache or failover; do not suggest v2/v3 flags.",
+    "invalid_fix_flags": [
+      "llm.failover.enabled",
+      "tune.rewrite.mode",
+      "rag.cache.invalidate_on_tune_change"
+    ],
+    "scenario": {
+      "version": "v1",
+      "tenant_id": "t-northwind",
+      "ui_mode": "interactive",
+      "has_session": true,
+      "query": "How do I reset the device?",
+      "provider_latency_ms": 800,
+      "secondary_latency_ms": 800,
+      "tenant_rpm_load": 10,
+      "overrides": {
+        "tune.top_k": 1
+      },
+      "config_changes": [
+        {
+          "flag": "tune.top_k",
+          "old": 5,
+          "new": 1,
+          "when": "2025-03-06T09:00:00Z",
+          "by": "tenant-admin"
+        }
+      ],
+      "relevant_doc_rank": 4,
+      "adapter_present": null,
+      "source_metadata": null,
+      "cache_stale": false,
+      "obs_enabled": [],
+      "trace_id": "tr-7f3a91"
+    },
+    "observed_symptom": "answer ignores the customer's documents",
+    "observed_error_code": null
+  }
+}

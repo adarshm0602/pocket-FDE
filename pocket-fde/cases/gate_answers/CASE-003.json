@@ -1,0 +1,26 @@
+{
+  "symptom": "Interactive UI timeouts",
+  "owning_team": "PLATFORM",
+  "affected_versions": [
+    "v1",
+    "v2",
+    "v3"
+  ],
+  "root_cause": "Provider latency 15s is under llm.timeout_ms (25s) but over platform.http.timeout_ms (12s); failover never triggers.",
+  "config_involved": [
+    "platform.http.timeout_ms",
+    "platform.retry.max_attempts",
+    "llm.timeout_ms",
+    "llm.failover.enabled"
+  ],
+  "evidence_checked": [
+    "q.invocation latency_ms=15000 finish_reason=stop",
+    "r.ui_error error_code=UI_TIMEOUT"
+  ],
+  "ruled_out": [
+    "validation",
+    "retrieval"
+  ],
+  "fix": "Raise platform.http.timeout_ms for tenant; Q to look at provider latency.",
+  "detection_tip": "Gateway success + UI error means the platform hop budget is the limit."
+}

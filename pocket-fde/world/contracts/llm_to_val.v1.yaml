@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: llm_to_val.v1
+  version: v1
+  description: hop Q -> V
+paths:
+  /val/check:
+    post:
+      summary: POST /val/check
+      requestBody:
+        $ref: '#/components/schemas/Body'
+components:
+  schemas:
+    Body:
+      type: object
+      required:
+      - raw_text
+      - finish_reason
+      - usage
+      - provider
+      - trace_id
+      properties:
+        raw_text:
+          description: string
+        finish_reason:
+          description: string
+        usage:
+          description: object
+        provider:
+          description: string
+        trace_id:
+          description: string

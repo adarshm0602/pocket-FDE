@@ -1,0 +1,18 @@
+{
+  "id": "CASE-003",
+  "title": "Chat answers time out for bank customer",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-globex",
+  "customer": "Globex Bank",
+  "version": "v3",
+  "description": "Globex Bank: Interactive UI times out roughly every other question, 'please try again' message. Retried by users, same result.",
+  "teams_touched": [
+    "R",
+    "Q",
+    "PLATFORM"
+  ],
+  "bounces": 2,
+  "resolution_notes": "Q logs show provider-a latency 15s, finish_reason=stop, under llm.timeout_ms=25000. UI hop budget platform.http.timeout_ms=12000 on v3 is lower, so both attempts time out. Failover does not trigger because the LLM never timed out. Fix: raised platform.http.timeout_ms for tenant to 20000 via platform on-call; asked Q to investigate provider latency separately.",
+  "quality": "good"
+}

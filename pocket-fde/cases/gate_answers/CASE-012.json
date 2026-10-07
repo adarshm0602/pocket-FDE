@@ -1,0 +1,21 @@
+{
+  "symptom": "Timeouts persist after a v3-only flag was set",
+  "owning_team": "PLATFORM",
+  "affected_versions": [
+    "v1",
+    "v2"
+  ],
+  "root_cause": "v3 mitigation (llm.failover.enabled) is not available on v2; the real cause is provider latency above platform.http.timeout_ms.",
+  "config_involved": [
+    "llm.failover.enabled",
+    "platform.http.timeout_ms"
+  ],
+  "evidence_checked": [
+    "q.invocation latency_ms=11000 finish_reason=stop"
+  ],
+  "ruled_out": [
+    "failover (absent on v2)"
+  ],
+  "fix": "Raise platform.http.timeout_ms; recommend upgrade to v3 for failover.",
+  "detection_tip": "Check the flag exists for the customer's version in config_flags before recommending it."
+}

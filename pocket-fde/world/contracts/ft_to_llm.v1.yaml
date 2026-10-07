@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: ft_to_llm.v1
+  version: v1
+  description: hop E -> Q
+paths:
+  /llm/invoke:
+    post:
+      summary: POST /llm/invoke
+      requestBody:
+        $ref: '#/components/schemas/Body'
+components:
+  schemas:
+    Body:
+      type: object
+      required:
+      - model_variant
+      - prompt
+      - max_tokens
+      - timeout_ms
+      - trace_id
+      properties:
+        model_variant:
+          description: string
+        prompt:
+          description: string
+        max_tokens:
+          description: int
+        timeout_ms:
+          description: int
+        trace_id:
+          description: string

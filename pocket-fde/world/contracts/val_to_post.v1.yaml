@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: val_to_post.v1
+  version: v1
+  description: hop V -> P
+paths:
+  /post/shape:
+    post:
+      summary: POST /post/shape
+      requestBody:
+        $ref: '#/components/schemas/Body'
+components:
+  schemas:
+    Body:
+      type: object
+      required:
+      - text
+      - citations
+      - validation_status
+      - trace_id
+      properties:
+        text:
+          description: string
+        citations:
+          description: array
+        validation_status:
+          description: string
+        trace_id:
+          description: string

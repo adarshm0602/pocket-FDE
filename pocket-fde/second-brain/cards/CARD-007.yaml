@@ -1,0 +1,24 @@
+id: CARD-007
+source_case: CASE-007
+symptom: Intermittent stale (old-style) answers returned for a subset of queries on
+  v3 after a retrieval settings change; other queries returned correct answers simultaneously.
+affected_versions:
+- v3
+owning_team: G
+root_cause: v3 response cache keyed by query+tenant+tune-hash is not invalidated on
+  Tune changes (rag.cache.invalidate_on_tune_change=false), so old answers are served.
+config_involved:
+- rag.cache.enabled
+- rag.cache.invalidate_on_tune_change
+- tune.top_k
+evidence_checked:
+- g.cache hit_or_miss=hit
+- no q.invocation for the trace
+- b.config_change shortly before
+ruled_out: null
+fix: Purge tenant cache; set rag.cache.invalidate_on_tune_change=true (v3 only).
+detection_tip: null
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

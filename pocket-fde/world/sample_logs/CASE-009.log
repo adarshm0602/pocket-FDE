@@ -1,0 +1,11 @@
+# CASE-009 v=v3 symptom='answer style changed' code=None
+2025-03-12T10:00:00.000Z INFO rag-flow g.cache trace_id=tr-7f3a91 hit_or_miss=miss
+2025-03-12T10:00:00.005Z INFO rag-flow g.rewrite trace_id=tr-7f3a91 rewrite_mode=history_aware had_session=true
+2025-03-12T10:00:00.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=8 rewrite_mode=history_aware top_k_effective=8
+[adapter] 2025-03-12T10:00:00.125Z trace=tr-7f3a91 tenant=t-wayne adapter_selected=adapter-t-wayne
+ts=2025-03-12T10:00:00.145Z level=WARN svc=llm-gw trace_id=tr-7f3a91 tenant=t-wayne rpm=75 limit=60
+ts=2025-03-12T10:00:00.145Z level=WARN svc=llm-gw trace_id=tr-7f3a91 from_provider=provider-a to_provider=provider-b reason=rate_limited
+ts=2025-03-12T10:00:00.145Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-b latency_ms=800 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=PASS code=-
+p.final status=ok redactions=0
+2025-03-12T10:00:00.970Z INFO ui-r req=req-3a91 tenant=t-wayne latency_ms=970 status=ok

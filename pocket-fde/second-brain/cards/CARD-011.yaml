@@ -1,0 +1,24 @@
+id: CARD-011
+source_case: CASE-011
+symptom: 'Umbrella Media One-Way UI failures could not be traced: support only had
+  a request ID with no trace ID, while gateway logs are keyed by trace ID, breaking
+  the correlation chain.'
+affected_versions:
+- v2
+- v3
+owning_team: U
+root_cause: One-Way UI drops trace_id in prod and logs only request id and status;
+  evidence gap, not a defect.
+config_involved:
+- obs.oneway_u.verbose_log
+evidence_checked:
+- u.verbose (after enabling)
+- q.ratelimit by timestamp
+ruled_out: null
+fix: Temporarily enable obs.oneway_u.verbose_log (global, log volume risk) and correlate
+  by timestamp.
+detection_tip: null
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

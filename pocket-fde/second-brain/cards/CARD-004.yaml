@@ -1,0 +1,27 @@
+id: CARD-004
+source_case: CASE-004
+symptom: Answers were generic and never quoted tenant-uploaded manuals (Wayne Foods);
+  manual content was absent from all responses despite being uploaded.
+affected_versions:
+- v1
+- v2
+- v3
+owning_team: B
+root_cause: A tenant-level top_k override set by Team B during a cost experiment capped
+  effective top_k at 2. The relevant manual section ranked 5th in retrieval results
+  and therefore never reached the model context window.
+config_involved:
+- tune.top_k
+- tune.tenant_override.enabled
+evidence_checked:
+- g.retrieval (confirmed n_chunks=2 for the affected tenant)
+ruled_out:
+- Model quality issue at the gateway; RAG pipeline bug.
+fix: Removed the tenant-level top_k override for Wayne Foods, restoring the v3 platform
+  default of top_k=8, allowing the manual section (ranked 5th) to reach context.
+detection_tip: Check g.retrieval top_k_effective against the default and look in b.config_change
+  for tenant overrides.
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

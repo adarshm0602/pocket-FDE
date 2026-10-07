@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "name": "Pocket FDE incident triage",
+  "type": "descriptive_workflow",
+  "execution_entrypoint": "pocket-fde/web/app.py:app",
+  "not_an_importable_automation_export": true,
+  "nodes": [
+    {
+      "id": "incident",
+      "input": "Library incident facts or custom issue; hidden evaluation answers excluded"
+    },
+    {
+      "id": "version_guard",
+      "rule": "Analysis requires v1, v2 or v3; unknown version permits source inspection only"
+    },
+    {
+      "id": "retrieval",
+      "choices": {
+        "surya": "BM25 + TF-IDF (Keyword search)",
+        "hybrid": "BM25 + pinned MiniLM embeddings"
+      },
+      "corpus": "Same approved cards, reviewed notes, world definitions and customer guides"
+    },
+    {
+      "id": "redaction",
+      "rule": "Recognized customer identifiers redacted before the provider request"
+    },
+    {
+      "id": "reasoning",
+      "rule": "Connected model; bounded router; one repair maximum"
+    },
+    {
+      "id": "validation",
+      "checks": [
+        "Structured answer",
+        "Known team/flag/log names",
+        "Version applicability",
+        "Retrieved citation IDs",
+        "At least three usable diagnostic questions"
+      ]
+    },
+    {
+      "id": "response",
+      "outputs": [
+        "Owner hypothesis",
+        "Evidence plan",
+        "Version considerations",
+        "Handover",
+        "Measured tokens",
+        "Escalation when needed"
+      ]
+    },
+    {
+      "id": "save",
+      "rule": "Private immutable analysis snapshot scoped to the browser workspace; browser draft restoration"
+    },
+    {
+      "id": "learning",
+      "rule": "Successful analysis automatically drafts provisional learning in private shared storage without another model call; human approves or rejects; only approved learning joins both retrieval modes. Optional manual entry remains available."
+    }
+  ],
+  "edges": [
+    [
+      "incident",
+      "version_guard"
+    ],
+    [
+      "version_guard",
+      "retrieval"
+    ],
+    [
+      "retrieval",
+      "redaction"
+    ],
+    [
+      "redaction",
+      "reasoning"
+    ],
+    [
+      "reasoning",
+      "validation"
+    ],
+    [
+      "validation",
+      "response"
+    ],
+    [
+      "response",
+      "save"
+    ],
+    [
+      "response",
+      "learning"
+    ],
+    [
+      "learning",
+      "retrieval"
+    ]
+  ],
+  "hosted_controls": {
+    "model_access": "Shared demo code",
+    "session": "Encrypted HttpOnly Secure cookie, eight-hour expiry",
+    "workspace": "Encrypted browser identity cookie",
+    "storage": "Private Vercel Blob",
+    "cooldown_seconds": 15,
+    "daily_model_requests": 50
+  },
+  "limits": [
+    "Fictional platform and development cases",
+    "Human confirmation required",
+    "No account-based recovery",
+    "No proven real-world or collaboration gain",
+    "Citation identity checks do not establish factual entailment"
+  ]
+}

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b2b">
+  <title>Pocket FDE — Incident workspace</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Pocket FDE home"><span class="brand-mark">pf</span><span>Pocket <strong>FDE</strong><small>INCIDENT WORKSPACE</small></span></a>
+    <div class="side-label">WORKSPACE</div>
+    <div class="nav-current"><span aria-hidden="true">▧</span> Incident triage <span class="nav-count" id="case-count">—</span></div>
+    <div class="library-header"><span class="side-label">CASE LIBRARY</span><button id="new-case" class="icon-button" aria-label="Create custom issue">+</button></div>
+    <label class="sr-only" for="case-search">Search cases</label>
+    <input id="case-search" class="case-search" type="search" placeholder="Find a case…">
+    <nav id="case-list" aria-label="Case library"><p class="sidebar-muted">Loading cases…</p></nav>
+    <div class="saved-work"><label class="side-label" for="saved-analysis">SAVED ANALYSES</label><select id="saved-analysis"><option value="">Your recent work</option></select><p id="save-note" class="sidebar-muted">Drafts stay in this browser. Completed analyses are saved privately.</p></div>
+    <div class="sidebar-bottom"><span class="small-symbol">◇</span><div><strong>Knowledge, carried forward.</strong><p><span id="card-count">—</span> reviewed case cards</p></div></div>
+  </aside>
+  <div class="app-shell">
+    <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong id="workspace-title">Incident triage</strong></div><button id="settings-button" class="settings-button"><span id="model-status-dot" class="status-dot"></span><span id="model-status">Connect a model</span><span class="settings-icon" aria-hidden="true">⚙</span></button></header>
+    <main>
+      <nav class="workspace-navigation" aria-label="Workspace sections"><button id="triage-tab" type="button" aria-pressed="true">Incident triage</button><button id="brain-tab" type="button" aria-pressed="false">Second Brain</button></nav>
+      <div id="triage-view">
+      <div class="page-heading"><div><div class="eyebrow">POCKET FDE / TRIAGE</div><h1>From incident to next step.</h1><p>Find the owner. Collect the right evidence. Move the case forward.</p></div><span id="pipeline-tag" class="pipeline-tag">Keyword search</span></div>
+      <div class="workspace-grid">
+        <section class="panel incident-panel" aria-labelledby="incident-heading">
+          <div class="panel-heading"><h2 id="incident-heading">Incident</h2><span id="selected-case" class="mono-label">CASE-001</span></div>
+          <form id="incident-form">
+            <div class="form-body">
+              <label for="issue-title">Issue title</label><input id="issue-title" required minlength="3" maxlength="250">
+              <div class="form-row"><div><label for="version">Platform version</label><select id="version"><option value="">Choose / confirm version</option><option>v1</option><option>v2</option><option>v3</option></select></div><div><label for="customer-tier">Customer tier</label><select id="customer-tier"><option value="standard">Standard</option><option value="enterprise">Enterprise</option></select></div></div>
+              <p id="version-help" class="field-help" hidden>This case has no platform version recorded. Confirm it before analyzing; you can still inspect sources.</p>
+              <p id="case-status" class="field-help" hidden></p>
+              <label for="description">What’s happening?</label><textarea id="description" rows="6" required minlength="10" maxlength="12000" placeholder="Describe the symptom, affected users, and when it started."></textarea>
+              <label for="evidence">Evidence so far <span class="optional">Optional</span></label><textarea id="evidence" class="evidence-input" rows="3" placeholder="Paste relevant logs or observations, one per line."></textarea>
+              <label for="retrieval-mode">Search mode</label><select id="retrieval-mode"><option value="surya">Keyword search</option><option value="hybrid" disabled>Hybrid search — setup needed</option></select>
+              <div class="method-note"><span class="method-icon" aria-hidden="true">▤</span><div><strong id="method-name">Keyword search</strong><span id="method-description">Search exact terms using the existing pipeline.</span><span>Both modes use the same reviewed knowledge and connected model.</span></div></div>
+              <p class="field-help">A completed analysis automatically drafts a shared Second Brain learning. It needs human approval before either search mode uses it.</p>
+              <p id="form-error" class="error-message" role="alert" hidden></p>
+            </div>
+            <div class="form-actions"><button type="button" id="inspect-button" class="secondary-button">Inspect sources</button><button type="submit" id="analyze-button" class="primary-button"><span class="button-icon" aria-hidden="true">✦</span> Analyze incident</button></div>
+          </form>
+        </section>
+        <section class="panel analysis-panel" aria-labelledby="analysis-heading" aria-busy="false">
+          <div class="panel-heading"><h2 id="analysis-heading">Analysis</h2><span id="analysis-status" class="quiet-tag">Ready when you are</span></div>
+          <div id="analysis-content" aria-live="polite">
+            <div class="empty-analysis"><div class="empty-icon" aria-hidden="true">✦</div><h3>A clearer path to resolution.</h3><p>Select a case or describe an issue.<br>Your analysis will connect the symptoms<br>to the knowledge your team already has.</p><div class="output-preview"><div><span>01</span> Likely owner & reasoning</div><div><span>02</span> Questions & logs to check</div><div><span>03</span> Suggested next step & sources</div></div></div>
+          </div>
+        </section>
+      </div>
+      <section class="panel sources-panel" aria-labelledby="sources-heading"><div class="panel-heading"><div class="sources-title"><h2 id="sources-heading">Retrieved knowledge</h2><span id="source-count" class="quiet-tag">Not retrieved yet</span></div><span class="subtle-label">Evidence behind the answer</span></div><div id="source-list"><p class="sources-empty">Inspect sources to see the knowledge matched to this incident. No model connection required.</p></div></section>
+      </div>
+      <section id="brain-view" aria-labelledby="brain-heading" hidden>
+        <div class="page-heading"><div><div class="eyebrow">POCKET FDE / SHARED KNOWLEDGE</div><h1 id="brain-heading">Second Brain</h1><p>Keep what your team learns. Review it. Use it in the next investigation.</p></div><button id="add-learning" type="button" class="primary-button">+ Add learning</button></div>
+        <p class="brain-intro">Completed investigations automatically draft learnings for Needs review. A human approves or rejects them before either search mode can use them. Shared with everyone who has demo access; keep secrets and personal data out. Add learning is an optional manual entry.</p>
+        <div id="brain-locked" class="panel brain-notice" hidden><h2>Unlock your shared knowledge</h2><p>Use the demo access code to browse the library, submit learnings and review them.</p><button id="brain-unlock" type="button" class="primary-button">Unlock Second Brain</button></div>
+        <p id="brain-error" class="error-message" role="alert" hidden></p>
+        <p id="brain-message" class="brain-message" role="status" hidden></p>
+        <div id="brain-library" hidden>
+          <div class="brain-toolbar"><div class="brain-filters" aria-label="Knowledge status"><button type="button" id="brain-approved" aria-pressed="true">Knowledge library <span id="approved-count">—</span></button><button type="button" id="brain-pending" aria-pressed="false">Needs review <span id="pending-count">—</span></button><button type="button" id="brain-rejected" aria-pressed="false">Rejected <span id="rejected-count">—</span></button></div><button id="brain-refresh" type="button" class="secondary-button">Refresh</button></div>
+          <div class="brain-search-row"><div><label for="brain-search">Search knowledge</label><input id="brain-search" type="search" placeholder="Search titles, evidence, fixes or source IDs…"></div><div><label for="brain-version">Version scope</label><select id="brain-version"><option value="">All versions</option><option>v1</option><option>v2</option><option>v3</option><option value="unknown">Not established</option></select></div></div>
+          <div class="brain-grid"><section class="panel brain-list-panel" aria-label="Knowledge entries"><p id="brain-results-count" class="brain-list-summary"></p><div id="brain-list"></div></section><section class="panel brain-detail-panel" id="brain-detail" aria-label="Knowledge details"><p class="sources-empty">Select an entry to read the full knowledge and its version scope.</p></section></div>
+        </div>
+      </section>
+      <footer><span>Synthetic platform & cases · mechanism demo</span><span id="knowledge-count">Loading knowledge…</span></footer>
+    </main>
+  </div>
+  <dialog id="settings-dialog" aria-labelledby="settings-title">
+    <div class="dialog-heading"><div><div class="eyebrow">MODEL CONNECTION</div><h2 id="settings-title">Connect your reasoning model</h2></div><button id="close-settings" class="icon-button" aria-label="Close model settings">×</button></div>
+    <p class="dialog-intro">Retrieval runs on the app server. The model receives the incident and retrieved context after identifier redaction.</p>
+    <form id="settings-form"><label for="provider">Provider</label><select id="provider"></select><label for="model-id">Model ID</label><input id="model-id" required maxlength="150"><div id="api-key-group"><label for="api-key">API key</label><input id="api-key" type="password" autocomplete="off" maxlength="1000" placeholder="Paste your provider’s API key"><p class="field-help">Used only for your session, for up to 8 hours. Hosted sessions use an encrypted, protected cookie. Keys are excluded from drafts, saved analyses and the repository.</p></div><p id="claude-help" class="field-help" hidden>Uses your local Claude Code login. Sign in with <code>claude auth login</code> in Terminal first.</p><p class="field-help">Connecting sends a small test request to verify access.</p><p id="settings-error" class="error-message" role="alert" hidden></p><div class="dialog-actions"><button id="disconnect-button" type="button" class="text-button">Disconnect session</button><button id="connect-button" type="submit" class="primary-button">Connect & verify</button></div></form>
+  </dialog>
+  <dialog id="access-dialog" aria-labelledby="access-title"><div class="dialog-heading"><h2 id="access-title">Unlock the live demo</h2><button id="close-access" class="icon-button" aria-label="Close access dialog">×</button></div><p class="dialog-intro">You can inspect the demo sources freely. Enter the shared access code to use the model, save analyses and open Second Brain.</p><form id="access-form"><label for="access-code">Demo access code</label><input id="access-code" type="password" autocomplete="off" required maxlength="150"><p id="access-error" class="error-message" role="alert" hidden></p><div class="dialog-actions"><button id="unlock-button" class="primary-button" type="submit">Unlock demo</button></div></form></dialog>
+  <dialog id="learning-dialog" aria-labelledby="learning-title"><div class="dialog-heading"><h2 id="learning-title">Add a learning</h2><button id="close-learning" class="icon-button" aria-label="Close learning form">×</button></div><p class="dialog-intro">Capture a confirmed finding or a question worth investigating. It stays pending until someone reviews the evidence and version scope.</p><form id="learning-form"><label for="learning-name">Learning title</label><input id="learning-name" required minlength="3" maxlength="180" placeholder="What did the team learn?"><label for="learning-author">Your name</label><input id="learning-author" required minlength="2" maxlength="80" autocomplete="name"><fieldset class="version-options"><legend>Affected versions</legend><label><input type="checkbox" name="learning-version" value="v1"> v1</label><label><input type="checkbox" name="learning-version" value="v2"> v2</label><label><input type="checkbox" name="learning-version" value="v3"> v3</label><p class="field-help">Leave unchecked if applicability is not established. Only select versions supported by evidence.</p></fieldset><label for="learning-content">Finding, evidence and next steps</label><textarea id="learning-content" rows="7" required minlength="20" maxlength="12000" placeholder="Describe the symptom, evidence checked, cause or hypothesis, and any verified fix. Include version limitations."></textarea><p class="field-help">Shared with your demo team. Do not paste API keys, personal details or confidential customer logs. Adding a learning does not call the model.</p><p id="learning-error" class="error-message" role="alert" hidden></p><div class="dialog-actions"><button id="cancel-learning" type="button" class="secondary-button">Cancel</button><button id="submit-learning" type="submit" class="primary-button">Submit for review</button></div></form></dialog>
+</body>
+</html>

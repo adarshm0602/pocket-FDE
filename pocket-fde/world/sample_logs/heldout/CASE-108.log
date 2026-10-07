@@ -1,0 +1,8 @@
+# CASE-108 (evidence that EXISTS in prod for this incident; hidden from the agent)
+{"ts": "2025-03-06T09:00:00Z", "evt": "config_change", "tenant": "t-northwind", "flag": "tune.top_k", "old": 5, "new": 1, "by": "tenant-admin"}
+2025-03-12T10:00:00.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=1 rewrite_mode=history_aware top_k_effective=1
+[adapter] 2025-03-12T10:00:00.125Z trace=tr-7f3a91 tenant=t-northwind adapter_selected=adapter-t-northwind
+ts=2025-03-12T10:00:00.145Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-a latency_ms=800 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=PASS code=-
+p.final status=ok redactions=0
+2025-03-12T10:00:00.970Z INFO ui-r req=req-3a91 tenant=t-northwind latency_ms=970 status=ok

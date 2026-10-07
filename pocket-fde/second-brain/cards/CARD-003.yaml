@@ -1,0 +1,29 @@
+id: CARD-003
+source_case: CASE-003
+symptom: Interactive UI times out on roughly every other question for Globex Bank,
+  displaying a 'please try again' message; users retried with the same result.
+affected_versions:
+- v1
+- v2
+- v3
+owning_team: PLATFORM
+root_cause: provider-a LLM response latency (~15 s) exceeded platform.http.timeout_ms=12000
+  on v3, causing the UI hop to time out before the response arrived. Because the LLM
+  completed within llm.timeout_ms=25000 (finish_reason=stop), failover never triggered,
+  so both the initial attempt and the user retry timed out identically.
+config_involved:
+- platform.http.timeout_ms
+- llm.timeout_ms
+evidence_checked:
+- q.invocation latency_ms=15000 finish_reason=stop
+- r.ui_error error_code=UI_TIMEOUT
+ruled_out:
+- validation
+- retrieval
+fix: Raised platform.http.timeout_ms for the affected tenant from 12000 to 20000 via
+  PLATFORM on-call; separately asked Q team to investigate provider-a latency.
+detection_tip: Gateway success + UI error means the platform hop budget is the limit.
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

@@ -1,0 +1,81 @@
+{
+  "id": "CASE-104",
+  "title": "Every answer returns a generic error",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-hooli",
+  "customer": "Hooli Cloud",
+  "version": "v3",
+  "description": "Hooli Cloud (v3): all questions now return a generic error message. The validation team's rejection counter is climbing. Customer says nothing changed on their side except a nightly docs sync.",
+  "provided_evidence": [
+    "2025-03-12T10:00:01.920Z INFO ui-r req=req-3a91 tenant=t-hooli latency_ms=1920 status=error",
+    "2025-03-12T10:00:01.920Z WARN ui-r req=req-3a91 error_code=VAL_REJECT_042"
+  ],
+  "ground_truth": {
+    "owning_team": "G",
+    "root_cause": "v3 requires citations; the tenant's retrieval returns no source metadata (source_ids empty), so validation rejects every response (VAL_REJECT_042).",
+    "false_lead": "V",
+    "first_guess_wrong_team": "V",
+    "expected_redirect": [
+      "V",
+      "G"
+    ],
+    "expected_escalate": false,
+    "key_questions_needed": [
+      {
+        "topic": "validation reason code",
+        "any_of": [
+          "reason code",
+          "v.verdict",
+          "VAL_REJECT"
+        ]
+      },
+      {
+        "topic": "source metadata / citations in retrieval",
+        "any_of": [
+          "source",
+          "citation",
+          "metadata"
+        ]
+      },
+      {
+        "topic": "docs sync change",
+        "any_of": [
+          "sync",
+          "re-index",
+          "reindex"
+        ]
+      }
+    ],
+    "needed_evidence": [
+      "v.verdict",
+      "g.chunk_ids",
+      "obs.rag_g.masked_chunk_id_log",
+      "validation.citations.required"
+    ],
+    "version_caveat": "Citations are only required by default in v3; on v1/v2 this symptom would not occur.",
+    "invalid_fix_flags": [
+      "validation.citation_check"
+    ],
+    "scenario": {
+      "version": "v3",
+      "tenant_id": "t-hooli",
+      "ui_mode": "interactive",
+      "has_session": true,
+      "query": "How do I reset the device?",
+      "provider_latency_ms": 800,
+      "secondary_latency_ms": 800,
+      "tenant_rpm_load": 10,
+      "overrides": {},
+      "config_changes": [],
+      "relevant_doc_rank": 3,
+      "adapter_present": null,
+      "source_metadata": null,
+      "cache_stale": false,
+      "obs_enabled": [],
+      "trace_id": "tr-7f3a91"
+    },
+    "observed_symptom": "Sorry, something went wrong. Please try again.",
+    "observed_error_code": "VAL_REJECT_042"
+  }
+}

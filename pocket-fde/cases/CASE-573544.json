@@ -1,0 +1,25 @@
+{
+  "case_number": "CASE-573544",
+  "title": "Same code working on one instance but not on other with identical setup",
+  "description": "Two instances with nearly identical setup and configuration showed divergent behavior. Code was working on one instance but failing on another, despite both instances appearing to have the same configuration.",
+  "status": "CLOSED",
+  "severity": "high",
+  "opened_at": "2026-10-06T00:00:00Z",
+  "closed_at": "2026-10-06T22:00:00Z",
+  "evidence": {
+    "working_instance": "Instance A - code executing successfully",
+    "failing_instance": "Instance B - same code failing to execute",
+    "configuration": "Identical configuration across both instances"
+  },
+  "root_cause": {
+    "status": "RESOLVED",
+    "cause": "File skipped during upgrade process on failing instance",
+    "issue": "Instance-level code divergence - critical file missing from deployment",
+    "impact": "Code execution failure due to missing upgrade file",
+    "fix_applied": "Deployed missing file to failing instance",
+    "result": "Code now working consistently across both instances"
+  },
+  "lesson_learned": "Instance-level code parity is critical - verify all files are included during upgrades. Identical config does not guarantee identical code state.",
+  "related_pattern": "CASE-S45G7",
+  "pattern_category": "identical_config_divergent_code"
+}

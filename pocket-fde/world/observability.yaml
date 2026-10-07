@@ -1,0 +1,50 @@
+# For each team: what is logged, what is OFF in prod and why, how to enable it, and the risk.
+# trace_id handling differs per team on purpose.
+teams:
+  R:
+    streams:
+      r.request:  {level: INFO, default_on: [v1, v2, v3], where: "bff logs / ui-r", fields: [req_id, tenant, latency_ms, status]}
+      r.ui_error: {level: WARN, default_on: [v1, v2, v3], where: "bff logs / ui-r", fields: [req_id, error_code]}
+      r.masked_query: {level: DEBUG, default_on: [], off_reason: "full query text is PII", enable: obs.ui_r.masked_query_log, scope: per-tenant, risk: "masked text still reveals topic; keep to hours, not days"}
+    trace_id: logged_raw
+  U:
+    streams:
+      u.request: {level: INFO, default_on: [v2, v3], where: "ui-u", fields: [req_id, status]}
+      u.verbose: {level: DEBUG, default_on: [], off_reason: "minimal logging by design in v2", enable: obs.oneway_u.verbose_log, scope: global, risk: "log volume"}
+    trace_id: dropped_in_prod
+    gap: "Very little evidence exists for One-Way UI issues; req_id only, no trace_id"
+  G:
+    streams:
+      g.retrieval: {level: INFO, default_on: [v1, v2, v3], where: "rag-flow", fields: [trace_id, n_chunks, rewrite_mode, top_k_effective]}
+      g.rewrite:   {level: INFO, default_on: [v2, v3], where: "rag-flow", fields: [trace_id, rewrite_mode, had_session]}
+      g.cache:     {level: INFO, default_on: [v3], where: "rag-flow", fields: [trace_id, hit_or_miss]}
+      g.chunk_ids: {level: DEBUG, default_on: [], off_reason: "chunk text is PII and high volume; chunk IDs only when enabled", enable: obs.rag_g.masked_chunk_id_log, scope: per-tenant, risk: "volume"}
+    trace_id: logged_raw
+  B:
+    streams:
+      b.config_change: {level: INFO, default_on: [v1, v2, v3], where: "tune-config audit", fields: [tenant, flag, old, new, changed_by]}
+      b.effective_params: {level: DEBUG, default_on: [], off_reason: "per-request volume", enable: obs.tune_b.effective_params_log, scope: per-tenant, risk: "volume"}
+    trace_id: hashed
+    gap: "Effective per-request overrides are hard to see unless effective_params is enabled"
+  E:
+    streams:
+      e.adapter: {level: INFO, default_on: [v1, v2, v3], where: "adapter-layer", fields: [trace_id, tenant, adapter_selected], note: "v1/v2: fallback to base is SILENT; v3 adds a WARN line"}
+    trace_id: logged_raw
+    off_in_prod: {what: prompt text, reason: PII, enable: null}
+  Q:
+    streams:
+      q.invocation: {level: INFO, default_on: [v1, v2, v3], where: "llm-gateway", fields: [trace_id, provider, latency_ms, finish_reason, tokens]}
+      q.ratelimit:  {level: WARN, default_on: [v2, v3], where: "llm-gateway", fields: [trace_id, tenant, rpm, limit]}
+      q.failover:   {level: WARN, default_on: [v3], where: "llm-gateway", fields: [trace_id, from_provider, to_provider]}
+      q.body:       {level: DEBUG, default_on: [], off_reason: "prompt/response bodies are PII and costly", enable: obs.llm_q.sampled_masked_body_log, scope: sampled, risk: "cost + residual PII"}
+    trace_id: logged_raw
+  V:
+    streams:
+      v.verdict: {level: INFO, default_on: [v1, v2, v3], where: "validation", fields: [trace_id, pass_fail, reason_code], note: "reason codes can be vague"}
+      v.rejected_text: {level: DEBUG, default_on: [], off_reason: "rejected text is PII", enable: obs.val_v.masked_rejected_text_log, scope: per-tenant, risk: "masked text may still leak"}
+    trace_id: logged_raw
+  P:
+    streams:
+      p.final: {level: INFO, default_on: [v1, v2, v3], where: "postproc", fields: [final_status, redaction_count]}
+      p.diff:  {level: DEBUG, default_on: [], off_reason: "pre/post text diff is PII", enable: obs.post_p.masked_diff_log, scope: per-tenant, risk: "PII exposure in diffs"}
+    trace_id: dropped_in_prod

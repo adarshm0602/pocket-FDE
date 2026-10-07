@@ -1,0 +1,45 @@
+teams:
+  R: {name: Interactive UI + BFF,          contact_role: ui-interactive-oncall, introduced: v1}
+  U: {name: One-Way UI,                    contact_role: ui-oneway-oncall,      introduced: v2}
+  G: {name: RAG Flow,                      contact_role: rag-oncall,            introduced: v1}
+  B: {name: Tune / RAG config layer,       contact_role: tune-config-oncall,    introduced: v1}
+  E: {name: Fine-tune / adapter layer,     contact_role: adapter-oncall,        introduced: v1}
+  Q: {name: LLM gateway,                   contact_role: llm-gateway-oncall,    introduced: v1}
+  V: {name: Response validation,           contact_role: validation-oncall,      introduced: v1}
+  P: {name: Response post-processing,      contact_role: postproc-oncall,       introduced: v1}
+  PLATFORM: {name: Shared platform properties (no single owner), contact_role: platform-oncall, introduced: v1}
+# What each team can be blamed for, used by handover accept/reject.
+boundaries:
+  R: [session handling, request shaping, interactive latency display]
+  U: [single-shot submit, no retry UX, one-way envelope rendering]
+  G: [query rewrite, retrieval, context assembly, response cache]
+  B: [retrieval params (top_k, chunking, rerank), tenant overrides, rewrite mode default]
+  E: [adapter lookup by tenant_id, base-model fallback]
+  Q: [model invocation, llm timeout/retry, token limits, rate limit, provider failover]
+  V: [schema checks, citation checks, safety filters]
+  P: [formatting, echoed-PII redaction, response envelope]
+  PLATFORM: [platform.http.timeout_ms, platform.retry.max_attempts]
+contracts:
+  ui_to_rag:   {producer: [R, U], consumer: G}
+  tune_params: {producer: B, consumer: G}
+  rag_to_ft:   {producer: G, consumer: E}
+  ft_to_llm:   {producer: E, consumer: Q}
+  llm_to_val:  {producer: Q, consumer: V}
+  val_to_post: {producer: V, consumer: P}
+  post_to_ui:  {producer: P, consumer: [R, U]}
+log_streams:
+  R: [r.request, r.ui_error]
+  U: [u.request]
+  G: [g.retrieval, g.rewrite, g.cache]
+  B: [b.config_change]
+  E: [e.adapter]
+  Q: [q.invocation, q.ratelimit, q.failover]
+  V: [v.verdict]
+  P: [p.final]
+# Where ownership is genuinely ambiguous (drives bouncing).
+ambiguous:
+  - {item: platform.http.timeout_ms,       candidates: [PLATFORM, Q, R], default_route: PLATFORM}
+  - {item: platform.retry.max_attempts,    candidates: [PLATFORM, Q],    default_route: PLATFORM}
+  - {item: validation.tenant_safety_policy, candidates: [V, B],          default_route: V, versions: [v3]}
+  - {item: "wrong answer after Tune change (cache)", candidates: [G, B], default_route: G, versions: [v3]}
+  - {item: "retrieval returns no source metadata", candidates: [G, B, V], default_route: G}

@@ -1,0 +1,55 @@
+{
+  "case_number": "CASE-S45G7",
+  "title": "Fine-tune plugin working in one instance but not the other",
+  "description": "Two identical instances (inst234 and inst567) have the same fine-tune plugin version setup, but the feature is working in inst234 and failing in inst567. Both instances appear to have identical configuration for the required fine-tune plugin version.",
+  "version": "v2",
+  "customer": "Internal - Platform Engineering",
+  "severity": "high",
+  "opened_at": "2026-10-06T14:15:00Z",
+  "evidence": {
+    "logs": [
+      "inst234: fine-tune plugin v2.1.4 initialized successfully",
+      "inst567: fine-tune plugin v2.1.4 initialization attempted but plugin not responding",
+      "inst567: plugin service health check: UNHEALTHY",
+      "inst234: plugin service health check: HEALTHY",
+      "inst567: log shows 'unable to connect to fine-tune backend service on port 8443'",
+      "inst234: fine-tune requests completing normally with inference latency 250ms",
+      "inst567: fine-tune requests timing out after 30s"
+    ],
+    "affected_queries": [
+      "Fine-tune inference queries on inst567",
+      "Model prediction requests using fine-tuned models"
+    ],
+    "instance_configs": {
+      "inst234": {
+        "fine_tune_plugin_version": "2.1.4",
+        "plugin_mode": "enabled",
+        "backend_service_url": "http://fine-tune-service:8443"
+      },
+      "inst567": {
+        "fine_tune_plugin_version": "2.1.4",
+        "plugin_mode": "enabled",
+        "backend_service_url": "http://fine-tune-service:8443"
+      }
+    }
+  },
+  "team_suspicion": "plugin configuration or backend service connectivity issue",
+  "validated_findings": {
+    "network_connectivity": {
+      "status": "VALIDATED - NOT THE ISSUE",
+      "checked_at": "2026-10-06T15:45:00Z",
+      "evidence": "Network connectivity confirmed working between inst567 and backend service."
+    }
+  },
+  "root_cause": {
+    "status": "RESOLVED",
+    "found_at": "2026-10-06T16:00:00Z",
+    "cause": "prepare() method was customized/overridden in inst567",
+    "file": "pocket-fde/repos/team_e_finetune/service.py",
+    "method": "prepare(ctx, payload)",
+    "issue": "Instance-level code customization diverged from out-of-box (OOB) implementation",
+    "fix_applied": "Reverted prepare() method to OOB version",
+    "result": "Plugin initialized successfully, inference requests completing normally"
+  },
+  "lesson_learned": "Config parity is necessary but not sufficient - must also validate code-level implementation matches across instances"
+}

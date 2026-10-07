@@ -1,0 +1,17 @@
+# CASE-003 v=v3 symptom='Sorry, something went wrong. Please try again.' code=UI_TIMEOUT
+2025-03-12T10:00:00.000Z INFO rag-flow g.cache trace_id=tr-7f3a91 hit_or_miss=miss
+2025-03-12T10:00:00.005Z INFO rag-flow g.rewrite trace_id=tr-7f3a91 rewrite_mode=history_aware had_session=true
+2025-03-12T10:00:00.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=8 rewrite_mode=history_aware top_k_effective=8
+[adapter] 2025-03-12T10:00:00.125Z trace=tr-7f3a91 tenant=t-globex adapter_selected=adapter-t-globex
+ts=2025-03-12T10:00:00.145Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-a latency_ms=15000 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=PASS code=-
+p.final status=ok redactions=0
+2025-03-12T10:00:12.000Z INFO rag-flow g.cache trace_id=tr-7f3a91 hit_or_miss=miss
+2025-03-12T10:00:12.005Z INFO rag-flow g.rewrite trace_id=tr-7f3a91 rewrite_mode=history_aware had_session=true
+2025-03-12T10:00:12.005Z INFO rag-flow g.retrieval trace_id=tr-7f3a91 n_chunks=8 rewrite_mode=history_aware top_k_effective=8
+[adapter] 2025-03-12T10:00:12.125Z trace=tr-7f3a91 tenant=t-globex adapter_selected=adapter-t-globex
+ts=2025-03-12T10:00:12.145Z level=INFO svc=llm-gw trace_id=tr-7f3a91 provider=provider-a latency_ms=15000 finish_reason=stop tokens=412
+VERDICT trace=tr-7f3a91 result=PASS code=-
+p.final status=ok redactions=0
+2025-03-12T10:00:24.000Z INFO ui-r req=req-3a91 tenant=t-globex latency_ms=24000 status=error
+2025-03-12T10:00:24.000Z WARN ui-r req=req-3a91 error_code=UI_TIMEOUT

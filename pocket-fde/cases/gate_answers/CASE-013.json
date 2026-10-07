@@ -1,0 +1,19 @@
+{
+  "symptom": "Burst failures during nightly batch",
+  "owning_team": "Q",
+  "affected_versions": [
+    "v2"
+  ],
+  "root_cause": "Nightly batch exceeds llm.ratelimit.per_tenant_rpm=60 (observed 95 rpm).",
+  "config_involved": [
+    "llm.ratelimit.per_tenant_rpm"
+  ],
+  "evidence_checked": [
+    "q.ratelimit rpm=95 limit=60"
+  ],
+  "ruled_out": [
+    "One-Way UI defect"
+  ],
+  "fix": "Raised per-tenant rpm to 120 and asked the customer to spread the batch.",
+  "detection_tip": "q.ratelimit lines aligned with failure bursts."
+}

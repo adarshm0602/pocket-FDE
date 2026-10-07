@@ -1,0 +1,22 @@
+{
+  "symptom": "Intermittent ERR_UPSTREAM in One-Way UI",
+  "owning_team": "Q",
+  "affected_versions": [
+    "v2"
+  ],
+  "root_cause": "Per-tenant rate limit (60 rpm) at the LLM gateway is exceeded; One-Way UI has no retry so the 429 becomes a generic error.",
+  "config_involved": [
+    "llm.ratelimit.per_tenant_rpm",
+    "ui.retry.enabled"
+  ],
+  "evidence_checked": [
+    "q.ratelimit rpm=85 limit=60",
+    "u.request status=error"
+  ],
+  "ruled_out": [
+    "One-Way UI bug",
+    "validation"
+  ],
+  "fix": "Raise llm.ratelimit.per_tenant_rpm for the tenant or smooth the batch; consider enabling UI retry.",
+  "detection_tip": "u.request has no error code; look for q.ratelimit lines at the same time."
+}

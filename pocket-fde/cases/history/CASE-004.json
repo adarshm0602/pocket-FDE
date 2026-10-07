@@ -1,0 +1,18 @@
+{
+  "id": "CASE-004",
+  "title": "Assistant ignores tenant documents (v3)",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-wayne",
+  "customer": "Wayne Foods",
+  "version": "v3",
+  "description": "Wayne Foods says answers are generic and never quote their uploaded manuals. First suspicion was model quality at the gateway, then retrieval.",
+  "teams_touched": [
+    "Q",
+    "G",
+    "B"
+  ],
+  "bounces": 2,
+  "resolution_notes": "Effective top_k for the tenant was 2 due to a tenant override set by Team B during a cost experiment. The manual section ranks 5th, so it never reaches context. g.retrieval showed n_chunks=2. Removed the override (default top_k=8 on v3). Not a model or RAG bug.",
+  "quality": "good"
+}

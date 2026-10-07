@@ -1,0 +1,49 @@
+{
+  "model": "gemini-3.5-flash",
+  "result": {
+    "case_id": "CASE-104",
+    "retrieval": {
+      "ids": [
+        "DOC:support:how-to-file-a-support-ticket",
+        "CARD-002",
+        "CARD-003",
+        "CARD-008",
+        "DOC:getting_started:quick-troubleshooting",
+        "DOC:features:guardrails-all-versions",
+        "OBS:R",
+        "DOC:features:interactive-chat-all-versions"
+      ],
+      "weak": true,
+      "sem_name": "tfidf",
+      "unreviewed_used": []
+    },
+    "owning_team": null,
+    "owner_contact": null,
+    "confidence": "low",
+    "reasoning": "",
+    "hypotheses": [],
+    "questions": [],
+    "logs_to_check": [],
+    "flags_to_check": [],
+    "recommended_flags": [],
+    "recommended_fix": "",
+    "version_caveat": "",
+    "do_not_apply": [],
+    "handover": null,
+    "escalate": true,
+    "escalation_reason": "model output unusable: The provider's quota or rate limit was reached. Wait or check your account. Retrieval is weak (no similar case card); treat the owner as a hypothesis only. The model did not return enough useful diagnostic questions. Collect more evidence before applying a fix.",
+    "capture_brief": "\n\n**Please share the solution:** Once this case is resolved, run:\n```\npython -m pocketfde.gate CASE-104\n```\nand answer the questions so we can save it for future incidents.",
+    "diagnostics_complete": false,
+    "model_answer_valid": false,
+    "grounding_issues": [
+      "incomplete diagnostics: 0 usable questions; at least 3 required"
+    ],
+    "invented_names": [],
+    "cost": {
+      "steps": 2,
+      "tokens": 0,
+      "calls": []
+    }
+  },
+  "raw_replies": []
+}

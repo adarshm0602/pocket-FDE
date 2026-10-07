@@ -1,0 +1,22 @@
+{
+  "symptom": "One-Way UI returns empty/odd answers while Interactive UI works",
+  "owning_team": "B",
+  "affected_versions": [
+    "v2"
+  ],
+  "root_cause": "v2 default tune.rewrite.mode=history_aware. One-Way UI sends no session_id, so the rewrite step has no history and produces an empty query; retrieval returns 0 chunks.",
+  "config_involved": [
+    "tune.rewrite.mode"
+  ],
+  "evidence_checked": [
+    "g.rewrite log: had_session=false rewrite_mode=history_aware",
+    "g.retrieval log: n_chunks=0"
+  ],
+  "ruled_out": [
+    "One-Way UI rendering bug",
+    "LLM gateway",
+    "validation"
+  ],
+  "fix": "Set tenant override tune.rewrite.mode=single_shot. Fixed by default in v3.",
+  "detection_tip": "Compare Interactive vs One-Way for the same tenant; check g.rewrite had_session=false and g.retrieval n_chunks=0."
+}

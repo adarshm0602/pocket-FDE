@@ -1,0 +1,22 @@
+id: CARD-010
+source_case: CASE-010
+symptom: Northwind Retail tenant's assistant responses became generic; previously
+  configured house-style tuning was no longer being applied, with no changes made
+  on the tenant's side.
+affected_versions:
+- v1
+- v2
+owning_team: E
+root_cause: Adapter lookup by tenant_id found nothing after a tenant id change, so
+  the adapter layer silently fell back to the base model (silent in v1/v2).
+config_involved:
+- ft.adapter.fallback_to_base
+evidence_checked:
+- e.adapter adapter_selected=base
+ruled_out: null
+fix: Re-register the adapter under the current tenant_id.
+detection_tip: null
+visibility: internal
+confidence: medium
+approved_by: curator-seed
+approved_on: '2026-10-05'

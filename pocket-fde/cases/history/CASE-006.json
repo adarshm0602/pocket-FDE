@@ -1,0 +1,18 @@
+{
+  "id": "CASE-006",
+  "title": "Intermittent errors in One-Way UI",
+  "reported_by": "support-engineer",
+  "customer_tier": "standard",
+  "tenant_id": "t-umbrella",
+  "customer": "Umbrella Media",
+  "version": "v2",
+  "description": "Umbrella Media: One-Way UI shows ERR_UPSTREAM randomly, mostly during their afternoon batch. Chat UI mostly fine.",
+  "teams_touched": [
+    "U",
+    "R",
+    "Q"
+  ],
+  "bounces": 1,
+  "resolution_notes": "q.ratelimit lines at the gateway: rpm=85 vs limit 60 for the tenant. One-Way UI has no retry (ui.retry.enabled=false), so the first 429 surfaces as ERR_UPSTREAM. Interim: raised llm.ratelimit.per_tenant_rpm to 120 for the tenant.",
+  "quality": "adequate"
+}

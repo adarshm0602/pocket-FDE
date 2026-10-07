@@ -1,0 +1,31 @@
+# Every flag the platform knows about. Agents must not reference flags that are not listed here.
+flags:
+  platform.http.timeout_ms:          {owner: PLATFORM, v1: 8000,  v2: 8000,  v3: 12000, note: "UI->RAG hop budget; shared by all teams"}
+  platform.retry.max_attempts:       {owner: PLATFORM, v1: 1,     v2: 2,     v3: 2,     note: "1 = no retry"}
+  llm.timeout_ms:                    {owner: Q, v1: 20000, v2: 20000, v3: 25000}
+  llm.failover.enabled:              {owner: Q, v1: null,  v2: null,  v3: true,  note: "absent before v3"}
+  llm.ratelimit.per_tenant_rpm:      {owner: Q, v1: null,  v2: 60,    v3: 60,    note: "absent in v1"}
+  tune.top_k:                        {owner: B, v1: 5, v2: 5, v3: 8}
+  tune.rewrite.mode:                 {owner: B, v1: null, v2: history_aware, v3: "single_shot for One-Way, history_aware for Interactive", note: "absent in v1"}
+  tune.tenant_override.enabled:      {owner: B, v1: true, v2: true, v3: true}
+  rag.cache.enabled:                 {owner: G, v1: null, v2: null, v3: true}
+  rag.cache.invalidate_on_tune_change: {owner: G, v1: null, v2: null, v3: false, note: "v3 only; default off, so Tune changes leave stale cache entries"}
+  ft.adapter.fallback_to_base:       {owner: E, v1: true, v2: true, v3: true, note: "v3 adds a warning log on fallback"}
+  validation.citation_check:         {owner: V, v1: false, v2: false, v3: null, note: "v1/v2 only; renamed in v3"}
+  validation.citations.required:     {owner: V, v1: null, v2: null, v3: true}
+  validation.strict_schema:          {owner: V, v1: true, v2: true, v3: true}
+  validation.tenant_safety_policy:   {owner: "V+B (ambiguous)", v1: null, v2: null, v3: "per-tenant", note: "v3 only; can conflict with Tune params"}
+  post.redact_echoed_pii:            {owner: P, v1: true, v2: true, v3: true}
+  ui.retry.enabled:                  {owner: U, v1: null, v2: false, v3: false, note: "One-Way UI has no retry UX"}
+  obs.ui_r.masked_query_log:         {owner: R, v1: false, v2: false, v3: false, note: "enable per tenant"}
+  obs.oneway_u.verbose_log:          {owner: U, v1: null, v2: false, v3: false}
+  obs.rag_g.masked_chunk_id_log:     {owner: G, v1: false, v2: false, v3: false}
+  obs.tune_b.effective_params_log:   {owner: B, v1: false, v2: false, v3: false}
+  obs.llm_q.sampled_masked_body_log: {owner: Q, v1: false, v2: false, v3: false}
+  obs.val_v.masked_rejected_text_log: {owner: V, v1: false, v2: false, v3: false}
+  obs.post_p.masked_diff_log:        {owner: P, v1: false, v2: false, v3: false}
+renamed_or_removed:
+  - {old: validation.citation_check, new: validation.citations.required, changed_in: v3, note: "Setting the old name on v3 has no effect; setting the new name on v1/v2 has no effect"}
+  - {old: null, new: llm.failover.enabled, changed_in: v3, note: "Introduced in v3. v1/v2 mitigation for provider timeouts is raising llm.timeout_ms and platform.http.timeout_ms, not failover"}
+  - {old: null, new: rag.cache.invalidate_on_tune_change, changed_in: v3, note: "Cache did not exist before v3"}
+  - {old: null, new: tune.rewrite.mode, changed_in: v2, note: "v1 rewrite is always history-aware; there is no mode flag to change"}

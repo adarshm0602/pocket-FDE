@@ -1,0 +1,18 @@
+{
+  "id": "CASE-007",
+  "title": "Wrong answer only sometimes after settings change",
+  "reported_by": "support-engineer",
+  "customer_tier": "enterprise",
+  "tenant_id": "t-globex",
+  "customer": "Globex Bank",
+  "version": "v3",
+  "description": "Globex Bank: after the team changed retrieval settings, some questions still return old-style answers while others are right. 'Worked yesterday.'",
+  "teams_touched": [
+    "Q",
+    "B",
+    "G"
+  ],
+  "bounces": 2,
+  "resolution_notes": "cleared cache, fine now",
+  "quality": "vague"
+}

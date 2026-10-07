@@ -15,6 +15,14 @@ The page and synthetic source inspection are public. Ask the project owners for 
 
 The platform and cases are fictional. Recommendations support investigation and require human verification; the application does not act on customer systems.
 
+## Editor skills
+
+The editor workflow is also included. Open this repository or `pocket-fde/` in Claude Code; skill definitions are available under `.claude/skills/` in both locations.
+
+Use `/analyze`, `/analyze-case`, `/analyze-case-distributed` and `/onboard` for source-based investigation and local configuration. `/triage-incident`, `/capture-solution`, `/capture-learning` and `/compare-costs` cover incident intake, pending learning and usage interpretation. See the [skill guide](.claude/skills/README.md) for commands and limitations.
+
+Surya's original demonstration helpers are retained and labeled: heuristic case routing, generic answer templates and local source inventories are separate from the current Gemini web pipeline. Human review remains required for new learning. No prototype accuracy or token-saving guarantees are claimed.
+
 ## Run locally
 
 Use Python **3.12** and [uv](https://docs.astral.sh/uv/). From the repository root:
@@ -39,10 +47,10 @@ You can also use Groq, xAI, or locally authenticated Claude Code. Model settings
 ## Verify
 
 ```sh
-.venv/bin/python -m pytest pocket-fde/tests pocket-fde/web/tests -q
+PYTHONPATH=pocket-fde .venv/bin/python -m pytest pocket-fde/tests pocket-fde/web/tests -q
 ```
 
-The current suite has **104 passing tests**. Live release checks cover both retrieval modes, Gemini analysis, private history, automatic capture, review persistence and mobile layout. These checks demonstrate the implemented mechanism; they do not establish real-world diagnostic accuracy or a human collaboration benefit.
+The suite covers the application and editor-helper behavior. Live release checks cover both retrieval modes, Gemini analysis, private history, automatic capture, review persistence and mobile layout. These checks demonstrate the implemented mechanism; they do not establish real-world diagnostic accuracy or a human collaboration benefit.
 
 ## Repository
 
@@ -55,7 +63,7 @@ The current suite has **104 passing tests**. Live release checks cover both retr
 | `pocket-fde/docs/customer/` | Guides included in the retrieval corpus |
 | `pocket-fde/tests/`, `pocket-fde/web/tests/` | Regression tests |
 | `pocket-fde/eval/`, `pocket-fde/web/evaluation/` | Evaluation tools and retained verification evidence |
-| `.claude/skills/capture-learning/` | Optional local learning capture and human review |
+| `.claude/skills/`, `pocket-fde/.claude/skills/` | Editor skills, source onboarding and human-reviewed learning capture |
 | `submission/` | Demo script, workflow description and release screenshots |
 
-[Project report](PROJECT_REPORT.md) explains the architecture, evidence and limitations. [Deployment guide](pocket-fde/web/DEPLOYMENT.md) records the Vercel setup and release procedure. This public submission repository uses `main`. It contains the cleaned application from the original `dev-adarsh` branch at commit `5002b65`, with fresh publication history. The existing live application remains connected to its original deployment setup.
+[Project report](PROJECT_REPORT.md) explains the architecture, evidence and limitations. [Deployment guide](pocket-fde/web/DEPLOYMENT.md) records the Vercel setup and release procedure. This public submission repository uses `main`. It contains the cleaned application from the original `dev-adarsh` branch at commit `d57007d`, with fresh publication history. The existing live application remains connected to its original deployment setup.

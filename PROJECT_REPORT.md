@@ -8,7 +8,7 @@
 
 **Submission branch:** `main`
 
-**Original source:** `suryak19/pocket-fde`, branch `dev-adarsh`, commit `5002b65`
+**Source:** original `dev-adarsh` branch at `d57007d`
 
 **Prepared:** 7 October 2026
 
@@ -19,6 +19,8 @@ Incident investigations across multiple teams often begin with incomplete eviden
 Pocket FDE is a browser workspace that retrieves reviewed knowledge and produces an investigation plan: an owner hypothesis, questions to ask, logs to inspect, version caveats and a proposed next step. Completed investigations contribute provisional learning for human review. The project uses a fictional GenAI platform with eight teams and three supported versions, not employer systems or live customer tickets.
 
 Surya built the foundational platform, case and knowledge model, and triage/retrieval workflow. Adarsh added the browser application, provider integration, selectable hybrid retrieval, durable hosted storage, automatic web learning and deployment, alongside integration and validation work.
+
+The project also ships [editor skills](.claude/skills/README.md) for platform questions, case investigation, source onboarding, triage, learning capture and usage interpretation. Definitions are discoverable from both the Git root and `pocket-fde/`. Surya's original helper prototypes are retained with explicit limits; their heuristic routing, answer templates and local inventories are separate from the evaluated Gemini web pipeline. Learning approval remains a human decision.
 
 ## 2. Implemented workflow
 
@@ -118,6 +120,7 @@ Submission still needs the final recorded demonstration link and any official re
 
 - [README and quick start](README.md)
 - [Application guide](pocket-fde/web/README.md)
+- [Editor skills and local source setup](.claude/skills/README.md)
 - [Deployment and recovery guide](pocket-fde/web/DEPLOYMENT.md)
 - [Case fixtures](pocket-fde/cases/README.md)
 - [Demo recording script](submission/demo-script.md)

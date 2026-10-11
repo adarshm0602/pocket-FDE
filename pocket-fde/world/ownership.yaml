@@ -1,7 +1,7 @@
 teams:
   R: {name: Interactive UI + BFF,          contact_role: ui-interactive-oncall, introduced: v1}
   U: {name: One-Way UI,                    contact_role: ui-oneway-oncall,      introduced: v2}
-  G: {name: RAG Flow,                      contact_role: rag-oncall,            introduced: v1}
+  G: {name: RAG Flow,                      contact_role: rag-oncall,            introduced: v1, contact_name: "Tony Stark", contact_email: "tony.stark@pocketfde.com"}
   B: {name: Tune / RAG config layer,       contact_role: tune-config-oncall,    introduced: v1}
   E: {name: Fine-tune / adapter layer,     contact_role: adapter-oncall,        introduced: v1}
   Q: {name: LLM gateway,                   contact_role: llm-gateway-oncall,    introduced: v1}

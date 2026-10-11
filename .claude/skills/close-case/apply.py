@@ -4,8 +4,12 @@
 Usage:
     python3 .claude/skills/close-case/apply.py CASE-ID ANSWERS.json
     python3 .claude/skills/close-case/apply.py CASE-ID ANSWERS.json --confirm
+    python3 .claude/skills/close-case/apply.py CASE-ID --archive
+    python3 .claude/skills/close-case/apply.py CASE-ID --archive --confirm
 
-Without --confirm it only prints the resolution that would be written.
+Closing a case writes its full record to cases/history/ and removes it from cases/.
+--archive moves a case that is already RESOLVED (but still in cases/) into history
+without re-drafting its answers. Without --confirm nothing is written.
 """
 
 import json
@@ -56,36 +60,48 @@ def build_resolution(case_id, answers):
     }
 
 
-def save_case_resolution(case, resolution):
-    """Save case resolution to history"""
+def archive_case(case):
+    """Move a closed case into cases/history/. The full record goes to history and the cases/ copy is removed."""
     history_dir = Path("pocket-fde/cases/history")
     history_dir.mkdir(parents=True, exist_ok=True)
 
     history_file = history_dir / f"{case['case_number']}.json"
-    history = {}
-    if history_file.exists():
-        history = json.loads(history_file.read_text())
+    record = json.loads(history_file.read_text()) if history_file.exists() else {}
+    record.update(case)
+    record["last_updated"] = datetime.now().isoformat()
+    history_file.write_text(json.dumps(record, indent=2))
 
-    history.update({
-        "case_number": case["case_number"],
-        "title": case.get("title", ""),
-        "customer": case.get("customer", ""),
-        "version": case.get("version", ""),
-        "resolution": resolution,
-        "last_updated": datetime.now().isoformat(),
-    })
-    history_file.write_text(json.dumps(history, indent=2))
+    Path(f"pocket-fde/cases/{case['case_number']}.json").unlink()
+    return history_file
 
 
-def update_case_status(case, resolution):
-    """Mark the case file RESOLVED and attach the reviewed resolution"""
-    case_path = Path(f"pocket-fde/cases/{case['case_number']}.json")
+def mark_resolved(case, resolution):
+    """Attach the reviewed resolution and mark the case RESOLVED"""
     case.update({
         "status": "RESOLVED",
         "closed_at": resolution["closed_at"],
         "resolution": resolution,
     })
-    case_path.write_text(json.dumps(case, indent=2))
+    return case
+
+
+def archive_closed_case(case_id, confirm):
+    """Archive a case that is already RESOLVED but still sits in cases/. No answers are needed."""
+    case_path = Path(f"pocket-fde/cases/{case_id}.json")
+    if not case_path.exists():
+        sys.exit(f"{case_id} is not in pocket-fde/cases/. Nothing to archive.")
+    case = json.loads(case_path.read_text())
+    if case.get("status") != "RESOLVED" or "resolution" not in case:
+        sys.exit(f"{case_id} is not closed (status: {case.get('status', 'none')}). Use the normal close flow with an answers file.")
+
+    print(f"Would move pocket-fde/cases/{case_id}.json to pocket-fde/cases/history/{case_id}.json")
+    print(f"Resolution closed_at: {case['resolution'].get('closed_at', 'unknown')}")
+    if not confirm:
+        print("\nDry run only. Nothing was written. Re-run with --confirm to move it.")
+        return
+
+    archive_case(case)
+    print(f"\nARCHIVED. Written: pocket-fde/cases/history/{case_id}.json (removed from pocket-fde/cases/)")
 
 
 def write_learnings_card(case, resolution):
@@ -162,14 +178,18 @@ def add_memory_entry(card_path, case, resolution):
 def main(argv):
     if len(argv) < 3:
         sys.exit(__doc__)
-    case_id, answers_path = argv[1], argv[2]
-    confirm = "--confirm" in argv[3:]
+    case_id, second = argv[1], argv[2]
+    confirm = "--confirm" in argv[2:]
 
     if not Path("pocket-fde/cases").is_dir():
         sys.exit("Run this from the repository root (the folder that contains pocket-fde/).")
 
+    if second == "--archive":
+        archive_closed_case(case_id, confirm)
+        return
+
     case = load_case(case_id)
-    answers = json.loads(Path(answers_path).read_text())
+    answers = json.loads(Path(second).read_text())
     resolution = build_resolution(case_id, answers)
     novel = bool(answers.get("novel_pattern", False))
 
@@ -180,12 +200,9 @@ def main(argv):
         print("\nDry run only. Nothing was written. Re-run with --confirm after review.")
         return
 
-    save_case_resolution(case, resolution)
-    update_case_status(case, resolution)
-    written = [
-        f"pocket-fde/cases/history/{case_id}.json",
-        f"pocket-fde/cases/{case_id}.json",
-    ]
+    case = mark_resolved(case, resolution)
+    history_file = archive_case(case)
+    written = [str(history_file), f"pocket-fde/cases/{case_id}.json (removed)"]
 
     if novel:
         card_path = write_learnings_card(case, resolution)
@@ -193,7 +210,7 @@ def main(argv):
             add_memory_entry(card_path, case, resolution)
             written += [str(card_path), "pocket-fde/MEMORY.md"]
 
-    print("\nCASE CLOSED. Written:")
+    print("\nCASE CLOSED AND ARCHIVED. Written:")
     for path in written:
         print(f"  {path}")
 

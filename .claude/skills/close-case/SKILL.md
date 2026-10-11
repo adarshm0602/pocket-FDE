@@ -16,8 +16,15 @@ Closes a case without typing every answer in the terminal. The human still revie
    - **Several found:** stop and ask which case to close, using AskUserQuestion with one option per case plus "none". Close one case at a time. Never combine evidence, answers or fixes from different cases in one draft, and keep each draft in its own scratchpad file, named `<CASE-ID>-answers.json`.
 
 1. **Load the case.** Read `pocket-fde/cases/<CASE-ID>.json` and, if it exists, `pocket-fde/cases/gate_answers/<CASE-ID>.json`. Also read `pocket-fde/cases/history/<CASE-ID>.json` if present.
-   - **Already RESOLVED:** warn the human and ask whether they want to re-close it. Do not continue without a yes.
+   - **Closed but still in `cases/`** (`status` is RESOLVED and the file is in `cases/`): do not re-draft. Go to the **Archive path** below.
+   - **Already in `cases/history/` and not in `cases/`:** it is closed and archived. Tell the human and stop. Nothing to do.
+   - **Not closed** (no RESOLVED status): follow steps 2 to 5. The close moves the case into `cases/history/`.
    - **File missing:** stop. Tell the human the case has no file and offer to create it with the `/analyze-case` template. Create it only after they agree.
+
+   **Archive path** (closed case still in `cases/`):
+   1. Dry run: `python3 .claude/skills/close-case/apply.py <CASE-ID> --archive` from the repository root. Show its output.
+   2. Ask the human with AskUserQuestion to move it into `cases/history/`. Do not continue without a yes.
+   3. Run the same command with `--confirm`. It merges the case into `cases/history/<CASE-ID>.json` and removes `cases/<CASE-ID>.json`.
 
 2. **Draft the answers from the chat and the case file.** Use the conclusions reached in this conversation, cross-checked against the case file's `evidence.supplied` and `investigation` fields. Write an answers file to the scratchpad directory using only what the chat and evidence support. Fields:
    - `root_cause`, `owning_team`, `symptoms`, `detection_method`, `logs_to_check`
@@ -31,7 +38,7 @@ Closes a case without typing every answer in the terminal. The human still revie
 
 4. **Dry run.** Run `python3 .claude/skills/close-case/apply.py <CASE-ID> <answers-file>` from the repository root. Show its output.
 
-5. **Apply.** Only after approval in step 3, run the same command with `--confirm`. It writes the case file, the history file, and, if `novel_pattern` is true, a learnings card and a `MEMORY.md` line. It never overwrites an existing card.
+5. **Apply.** Only after approval in step 3, run the same command with `--confirm`. It marks the case RESOLVED, writes the full record to `pocket-fde/cases/history/<CASE-ID>.json`, and removes `pocket-fde/cases/<CASE-ID>.json`, so closed cases live only in history. If `novel_pattern` is true, it also writes a learnings card and a `MEMORY.md` line. It never overwrites an existing card.
 
 ## Rules
 

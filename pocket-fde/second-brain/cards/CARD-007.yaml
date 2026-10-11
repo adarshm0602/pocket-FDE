@@ -1,5 +1,7 @@
 id: CARD-007
 source_case: CASE-007
+related_cases:
+- CASE-94843
 symptom: Intermittent stale (old-style) answers returned for a subset of queries on
   v3 after a retrieval settings change; other queries returned correct answers simultaneously.
 affected_versions:

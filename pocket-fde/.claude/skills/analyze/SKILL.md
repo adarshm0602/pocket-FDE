@@ -10,7 +10,7 @@ Use this skill for incident triage, feature availability, flag defaults, log ava
 - Identify the question and establish the relevant platform version. Ask for missing context rather than guessing.
 - Check actual definitions in `pocket-fde/world/`, relevant sections of `pocket-fde/docs/customer/`, and approved cards/notes under `pocket-fde/second-brain/`. Cite the exact supporting file or source ID.
 - Treat pending/rejected learning and hidden case ground truth as unavailable for answering. A historical match does not establish a new cause.
-- For an incident, follow `/analyze-case`: compare mechanisms, ask diagnostic questions, give a conditional owner/fix and a handover, and acknowledge uncertainty.
+- For an incident, follow `/analyze-case`: create the case file at the start if it is new, compare mechanisms, ask diagnostic questions, give a conditional owner/fix and a handover, and acknowledge uncertainty.
 - A log request means explain the known stream, version, production availability and documented enablement risk. This skill has no access to a real company's dashboards and must not claim to have fetched production logs.
 - Do not copy tenant identifiers, credentials or raw sensitive logs to an external model. Prefer redacted relevant evidence and preserve internal/customer-safe distinctions.
 - Do not execute a fix, send a customer update, approve a learning or close a case without the appropriate human instruction.

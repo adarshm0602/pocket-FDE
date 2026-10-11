@@ -1,0 +1,29 @@
+{
+  "case_number": "CASE-94843",
+  "title": "Cache issues on v3: inconsistent answers after a retrieval settings change",
+  "customer": "not established",
+  "version": "v3",
+  "resolution": {
+    "case_number": "CASE-94843",
+    "closed_at": "2026-10-11T12:34:33.514139",
+    "root_cause": "v3 response cache (Team G) served answers cached before a Tune/retrieval settings change; invalidate_on_tune_change was not enabled, so stale entries were returned for some queries while others were correct. Per CARD-007.",
+    "owning_team": "G",
+    "symptoms": "Customer on v3 saw inconsistent answers: some queries returned old-style answers after a retrieval settings change, while other queries were correct at the same time. Reported as 'cache issues'.",
+    "detection_method": "Matched to approved CARD-007: g.cache hit with no q.invocation for the trace, and b.config_change shortly before. Customer trace evidence was not supplied in this session; confirmation is per CARD-007 and team resolution.",
+    "logs_to_check": "g.cache (hit_or_miss, trace_id); b.config_change (timestamp, tenant, flag); q.invocation (absent on cache hit); g.retrieval (top_k_effective)",
+    "fix": {
+      "type": "Config change",
+      "details": "Purged the tenant's response cache and set rag.cache.invalidate_on_tune_change=true (per CARD-007).",
+      "affected_versions": [
+        "v3"
+      ],
+      "fixed_in": "not established"
+    },
+    "ruled_out": "not established",
+    "pattern": "Response cache not invalidated after a Tune change (CARD-007 pattern)",
+    "confidence": "Medium",
+    "reviewed_by": "human",
+    "ai_assisted": true
+  },
+  "last_updated": "2026-10-11T12:34:33.514229"
+}
